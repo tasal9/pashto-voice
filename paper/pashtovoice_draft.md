@@ -14,7 +14,7 @@ The rapid progress of generative speech models has increased the need for large,
 
 Pashto presents challenges that make direct transfer from related languages unreliable. It is written in an extended Arabic script, contains Pashto-specific letters that are often omitted or substituted in informal digital text, and spans major dialectal varieties across Afghanistan and Pakistan. These properties affect ASR, normalization, sentence segmentation, grapheme-to-phoneme behavior, and TTS pronunciation.
 
-Recent Mozilla Common Voice work has substantially changed the Pashto speech-data landscape. Analyses of Common Voice Pashto report rapid growth from very small early releases to thousands of total recorded hours in later releases, with version 24.0 containing 2,768.7 total hours and 975.89 validated hours contributed by 6,654 speakers. However, Common Voice is primarily an ASR-oriented read-speech corpus. TTS training benefits from stricter constraints: clean audio, complete sentences, accurate punctuation, stable speaker labels, minimal background noise, and reliable sentence-level alignment.
+Recent Mozilla Common Voice work has substantially changed the Pashto speech-data landscape. The Mozilla Data Collective datasheet for Common Voice Pashto 26.0 reports 5,193,154 clips, 5,521.62 recorded hours, 3,261 validated hours, and 8,355 speakers. However, Common Voice is primarily an ASR-oriented read-speech corpus, and its current datasheet forbids speaker-identification attempts and re-hosting. TTS training benefits from stricter constraints: clean audio, complete sentences, accurate punctuation, stable speaker labels where legally allowed, minimal background noise, and reliable sentence-level alignment.
 
 PashtoVoice targets this gap by adapting a ParsVoice-style audiobook-to-corpus pipeline to Pashto. The goal is not only to release a corpus, but also to provide a reproducible method for constructing high-quality Pashto speech-text data when reference transcripts are missing, incomplete, or not aligned to the exact audio edition.
 
@@ -26,7 +26,7 @@ High-resource TTS and ASR research has benefited from datasets such as LibriSpee
 
 ### 2.2 Pashto Speech Datasets
 
-Pashto speech resources have expanded recently but remain uneven for TTS. The Pashto Common Voice corpus is the most visible open community dataset and has become important for ASR research. A release-level analysis reports 2,407,799 clips, 2,768.7 total hours, 975.89 validated hours, 6,654 speakers, and 59,369 unique sentences in Common Voice v24.0. Earlier work on Pashto Common Voice reported growth through v23, reaching 147 total hours and 1,483 contributors, and showed that Whisper Base fine-tuning on Pashto could reduce WER substantially compared with zero-shot use.
+Pashto speech resources have expanded recently but remain uneven for TTS. The Pashto Common Voice corpus is the most visible open community dataset and has become important for ASR research. Common Voice Pashto 26.0 reports 5,521.62 total recorded hours and 3,261 validated hours, while earlier analyses documented rapid growth across releases. Because Common Voice forbids speaker-identification attempts, it is best treated as an ASR benchmark or non-rehosted training source rather than the main speaker-clustered PashtoVoice release.
 
 Other resources include PashtoCoST/PLDST, a controlled speech-text dataset with 20,000 recordings from five native speakers, together with Pashto text, English translation, and romanized transcription. Commercial Pashto ASR datasets also exist, but access restrictions limit reproducibility and public benchmarking.
 
@@ -40,19 +40,19 @@ PashtoVoice is a pipeline for converting long-form Pashto recordings into a stru
 
 ### 3.1 Data Collection and Source Selection
 
-Candidate sources include Pashto audiobooks, educational readings, public speeches, and radio-style narrative recordings when redistribution rights permit release. We prioritize recordings with clean narration, stable speakers, minimal background music, and clear licensing.
+Candidate sources include Pashto audiobooks, educational readings, public speeches, and radio-style narrative recordings when redistribution rights permit release. We prioritize recordings with clean narration, stable speakers, minimal background music, and clear licensing. For the first technical pilot, we selected FLEURS Pashto because it is CC-BY-4.0, benchmark-like, and large enough for a 5-10 hour smoke test. For the first true long-form pilot, Books for Afghanistan and Darakht-e Danesh are the strongest audiobook-style candidates, but both require explicit permission before redistributed derivative segments can be released.
 
 Unlike community prompt-read corpora, long-form sources provide extended prosodic context and richer lexical coverage. However, they also require careful segmentation and alignment. When source transcripts are not available, transcription is produced by ASR and then filtered through quality checks.
 
 ### 3.2 Intelligent Audio Segmentation
 
-Raw recordings are first segmented using VAD. A pilot comparison will evaluate WebRTC VAD, Silero VAD, and Whisper-based segmentation. Candidate segments are transcribed by Pashto ASR and checked for sentence completeness.
+Raw recordings are first segmented using VAD. A pilot comparison will evaluate WebRTC VAD, Silero VAD, and Whisper-based segmentation. Candidate segments are transcribed by Katib-ASR, our selected Pashto baseline, and checked for sentence completeness.
 
 For incomplete segments, the boundary is extended in small increments and the segment is re-transcribed. The loop continues until the sentence-completion classifier predicts a complete sentence or the maximum extension limit is reached. Remaining incomplete items are retained in the processed subset with an incompleteness flag, but excluded from the strict TTS-ready subset.
 
 ### 3.3 Pashto Sentence-Completion Classifier
 
-The sentence-completion classifier predicts whether a transcript forms a complete Pashto sentence. We will fine-tune a Pashto-capable encoder such as XLM-R, mBERT, or a dedicated Pashto language model.
+The sentence-completion classifier predicts whether a transcript forms a complete Pashto sentence. We will fine-tune a Pashto-capable encoder such as XLM-R, mBERT, or a dedicated Pashto language model. The first implementation also includes deterministic Pashto normalization for Arabic Kaf, Gaf variants, Yey variants, diacritics, tatweel, zero-width joiners, and non-Arabic-script noise.
 
 Training examples will be generated from curated Pashto text. Complete sentences serve as positives. Negative examples are created by truncating final words or removing final characters, matching the common failure mode where VAD cuts off the end of a sentence.
 
@@ -101,17 +101,17 @@ PashtoVoice will release audio segments, normalized transcripts, punctuation-res
 
 ## 4. Corpus Analysis
 
-This section will be filled after processing. Planned statistics include:
+This section will be filled after processing. The first attempted FLEURS Pashto pilot was blocked by remote dataset transfer in the local environment before any rows were produced, so no corpus statistics are reported here yet. Planned statistics include:
 
 | Metric | Processed ASR-Oriented Subset | Final TTS Subset |
 | --- | ---: | ---: |
-| Total hours | TBD | TBD |
-| Segments | TBD | TBD |
-| Speakers | TBD | TBD |
-| Total tokens | TBD | TBD |
-| Unique word forms | TBD | TBD |
-| Mean segment duration | TBD | TBD |
-| Median segment duration | TBD | TBD |
+| Total hours | pending pilot transfer | pending long-form source clearance |
+| Segments | pending pilot transfer | pending long-form source clearance |
+| Speakers | not used for FLEURS/Common Voice pilot | pending permitted source |
+| Total tokens | pending pilot transfer | pending long-form source clearance |
+| Unique word forms | pending pilot transfer | pending long-form source clearance |
+| Mean segment duration | pending pilot transfer | pending long-form source clearance |
+| Median segment duration | pending pilot transfer | pending long-form source clearance |
 
 We will also report source distribution, dialect metadata where available, gender metadata where available, quality-score distributions, boundary-trimming statistics, and speaker-clustering purity against known metadata.
 
@@ -162,7 +162,7 @@ Evaluate ASR systems on held-out Pashto speech with normalized references.
 
 | ASR System | WER | CER | Notes |
 | --- | ---: | ---: | --- |
-| Katib-ASR or Pashto Whisper model | TBD | TBD | Candidate production backend |
+| Katib-ASR | 28.23 reported on model-card held-out set | TBD on PashtoVoice pilot | Selected production baseline |
 | Whisper large-v3 | TBD | TBD | Multilingual baseline |
 | Other Pashto ASR | TBD | TBD | Optional |
 

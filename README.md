@@ -10,7 +10,12 @@ Create a large-scale, multi-speaker Pashto speech-text corpus suitable for text-
 
 - `paper/pashtovoice_draft.md` - first research-paper draft modeled on the ParsVoice structure, rewritten for Pashto.
 - `docs/pashto_pipeline_plan.md` - implementation plan for building the corpus.
+- `docs/source_selection.md` - selected and deferred Pashto audio sources with licensing notes.
+- `docs/asr_baseline.md` - selected baseline ASR model and evaluation plan.
 - `metadata/schema.md` - proposed release metadata schema.
+- `scripts/pashto_normalize.py` - Pashto Arabic-script normalization utility.
+- `scripts/load_fleurs_pilot.py` - FLEURS Pashto pilot manifest builder.
+- `scripts/pilot_stats.py` - pilot statistics calculator.
 - `notes/parsvoice_source_summary.md` - concise summary of the attached Persian paper.
 - `tmp/pdfs/2510.10774v3.txt` - extracted text from the attached PDF for local reference.
 
@@ -20,8 +25,14 @@ Create a large-scale, multi-speaker Pashto speech-text corpus suitable for text-
 
 ## Immediate Next Steps
 
-1. Choose permitted Pashto audio sources, especially audiobook, radio archive, educational, or public-domain long-form speech.
-2. Select a baseline Pashto ASR model for transcription and boundary checks.
-3. Build Pashto-specific text normalization for Arabic-script variants and Pashto-only letters.
-4. Run a small pilot on 5-10 hours of audio before scaling.
-5. Fill the `TBD` statistics in the paper draft from measured pipeline outputs.
+1. Retry the FLEURS Pashto pilot download on a network path where Hugging Face shards transfer normally.
+2. Request explicit redistribution permission from Books for Afghanistan and Darakht-e Danesh for long-form audiobook use.
+3. Run Katib-ASR on the first pilot manifest once audio is locally available.
+4. Fill final `TBD` statistics in the paper draft from `metadata/pilot_stats.json`.
+
+## Pilot Commands
+
+```bash
+/Users/yaqoobtasal/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 scripts/load_fleurs_pilot.py --config ps_af --split train --target-hours 8 --streaming --out metadata/fleurs_pashto_pilot.jsonl
+/Users/yaqoobtasal/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 scripts/pilot_stats.py metadata/fleurs_pashto_pilot.jsonl
+```

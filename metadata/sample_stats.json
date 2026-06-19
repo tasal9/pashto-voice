@@ -1,0 +1,13 @@
+{
+  "total_hours": 0.004,
+  "segments": 3,
+  "speakers": 2,
+  "sources": 1,
+  "total_tokens": 25,
+  "unique_word_forms": 23,
+  "mean_segment_duration_sec": 4.467,
+  "median_segment_duration_sec": 4.2,
+  "mean_tokens_per_segment": 8.333,
+  "mean_pashto_character_ratio": 1.0,
+  "mean_pashto_specific_letter_coverage": 0.2222
+}
