@@ -1,0 +1,14 @@
+{
+  "source_id": "youtube_amin_sultani",
+  "channel_url": "https://www.youtube.com/@AminSultani10/videos",
+  "channel_name": "Amin Sultani",
+  "inventory_rows": 73,
+  "duration_rows": 73,
+  "total_candidate_hours": 18.56,
+  "mean_video_duration_min": 15.26,
+  "median_video_duration_min": 15.17,
+  "license_status": "permission_granted_user_reported",
+  "download_allowed": true,
+  "permission_date": "2026-06-20",
+  "notes": "Metadata-only inventory collected with yt-dlp --flat-playlist --skip-download before permission confirmation. User reported that permission has been obtained on 2026-06-20. Keep permission terms/evidence before public release."
+}

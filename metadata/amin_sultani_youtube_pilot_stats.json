@@ -1,0 +1,13 @@
+{
+  "source_id": "youtube_amin_sultani",
+  "pilot_videos": 25,
+  "downloaded_audio_files": 25,
+  "total_hours": 8.301,
+  "total_duration_sec": 29882.0,
+  "mean_video_duration_min": 19.92,
+  "median_video_duration_min": 21.98,
+  "raw_audio_dir": "data/raw/youtube_amin_sultani/audio",
+  "download_status": "complete",
+  "format": "m4a audio-only streams",
+  "needs_ffmpeg_conversion": true
+}

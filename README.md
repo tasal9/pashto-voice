@@ -16,6 +16,9 @@ Create a large-scale, multi-speaker Pashto speech-text corpus suitable for text-
 - `scripts/pashto_normalize.py` - Pashto Arabic-script normalization utility.
 - `scripts/load_fleurs_pilot.py` - FLEURS Pashto pilot manifest builder.
 - `scripts/pilot_stats.py` - pilot statistics calculator.
+- `scripts/inventory_youtube_channel.py` - metadata-only YouTube channel inventory helper; does not download media.
+- `scripts/select_youtube_pilot.py` - selects a target-duration YouTube pilot subset after permission.
+- `scripts/download_youtube_audio.py` - downloads permitted audio-only YouTube streams.
 - `notes/parsvoice_source_summary.md` - concise summary of the attached Persian paper.
 - `tmp/pdfs/2510.10774v3.txt` - extracted text from the attached PDF for local reference.
 
@@ -25,10 +28,11 @@ Create a large-scale, multi-speaker Pashto speech-text corpus suitable for text-
 
 ## Immediate Next Steps
 
-1. Download the FLEURS Pashto train audio archive on a faster network path and extract it locally.
-2. Send the permission requests in `docs/permission_request_books_for_afghanistan.md` and `docs/permission_request_darakht_e_danesh.md`.
-3. Run Katib-ASR on the pilot manifest once audio is locally available.
-4. Replace remaining long-form corpus placeholders after a permitted audiobook source is processed.
+1. Paste Amin Sultani permission terms into `metadata/permissions/amin_sultani_permission_record.md`.
+2. Install `ffmpeg` for audio conversion/segmentation.
+3. Convert the downloaded Amin Sultani `.m4a` files to WAV.
+4. Run segmentation and Katib-ASR on the converted long-form pilot audio.
+5. Replace remaining long-form corpus placeholders after segmentation/transcription.
 
 ## Pilot Commands
 

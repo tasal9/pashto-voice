@@ -40,7 +40,7 @@ PashtoVoice is a pipeline for converting long-form Pashto recordings into a stru
 
 ### 3.1 Data Collection and Source Selection
 
-Candidate sources include Pashto audiobooks, educational readings, public speeches, and radio-style narrative recordings when redistribution rights permit release. We prioritize recordings with clean narration, stable speakers, minimal background music, and clear licensing. For the first technical pilot, we selected FLEURS Pashto because it is CC-BY-4.0, benchmark-like, and large enough for a 5-10 hour smoke test. For the first true long-form pilot, Books for Afghanistan and Darakht-e Danesh are the strongest audiobook-style candidates, but both require explicit permission before redistributed derivative segments can be released.
+Candidate sources include Pashto audiobooks, educational readings, public speeches, and radio-style narrative recordings when redistribution rights permit release. We prioritize recordings with clean narration, stable speakers, minimal background music, and clear licensing. For the first technical pilot, we selected FLEURS Pashto because it is CC-BY-4.0, benchmark-like, and large enough for a 5-10 hour smoke test. For the first true long-form pilot, we selected Amin Sultani's audiobook/podcast-style YouTube channel after the user reported that permission had been obtained. A metadata-only inventory of this channel contains 73 videos totaling approximately 18.56 candidate hours. Books for Afghanistan and Darakht-e Danesh remain additional permission-required candidates.
 
 Unlike community prompt-read corpora, long-form sources provide extended prosodic context and richer lexical coverage. However, they also require careful segmentation and alignment. When source transcripts are not available, transcription is produced by ASR and then filtered through quality checks.
 
@@ -101,19 +101,19 @@ PashtoVoice will release audio segments, normalized transcripts, punctuation-res
 
 ## 4. Corpus Analysis
 
-The first 8-hour technical pilot was built from FLEURS Pashto train metadata. This pilot verifies source ingestion, Pashto text normalization, manifest generation, and corpus-statistics calculation. It does not yet include long-form audiobook data, speaker clustering, boundary optimization, or Katib-ASR inference because the FLEURS audio archive is not yet downloaded locally.
+The first 8-hour technical pilot was built from FLEURS Pashto train metadata. This pilot verifies source ingestion, Pashto text normalization, manifest generation, and corpus-statistics calculation. After permission was reported for the Amin Sultani YouTube channel, we also selected and downloaded a first long-form raw-audio pilot from that channel. This long-form pilot verifies permission-gated source ingestion and raw audio acquisition, but it does not yet include segmentation, speaker clustering, boundary optimization, or Katib-ASR inference.
 
 | Metric | Processed ASR-Oriented Subset | Final TTS Subset |
 | --- | ---: | ---: |
-| Total hours | 8.0 | pending long-form source clearance |
-| Segments | 2,265 | pending long-form source clearance |
-| Speakers | not used for FLEURS pilot | pending permitted source |
-| Total tokens | 58,868 | pending long-form source clearance |
-| Unique word forms | 7,692 | pending long-form source clearance |
-| Mean segment duration | 12.716 s | pending long-form source clearance |
-| Median segment duration | 11.880 s | pending long-form source clearance |
+| Total hours | 8.0 | 8.301 raw video hours |
+| Segments | 2,265 | pending segmentation |
+| Speakers | not used for FLEURS pilot | 1 known channel/narrator; clustering pending |
+| Total tokens | 58,868 | pending ASR/transcription |
+| Unique word forms | 7,692 | pending ASR/transcription |
+| Mean segment duration | 12.716 s | 19.92 min per source video |
+| Median segment duration | 11.880 s | 21.98 min per source video |
 
-The pilot contains one source (`google_fleurs_ps_af`). Clip-level gender metadata contains 1,689 male-labelled clips and 576 female-labelled clips. Mean tokens per segment is 25.99, mean Pashto character ratio is 0.9998, and mean Pashto-specific letter coverage is 0.4494. We will also report source distribution, dialect metadata where available, gender metadata where available, quality-score distributions, boundary-trimming statistics, and speaker-clustering purity against known metadata once a permitted long-form source is processed.
+The FLEURS pilot contains one source (`google_fleurs_ps_af`). Clip-level gender metadata contains 1,689 male-labelled clips and 576 female-labelled clips. Mean tokens per segment is 25.99, mean Pashto character ratio is 0.9998, and mean Pashto-specific letter coverage is 0.4494. The Amin Sultani raw pilot contains 25 downloaded audio-only `.m4a` files totaling 475 MB locally, selected from a 73-video, 18.56-hour metadata inventory. We will also report source distribution, dialect metadata where available, quality-score distributions, boundary-trimming statistics, and speaker-clustering purity after segmentation and ASR processing.
 
 ## 5. Evaluation: TTS Model Training
 

@@ -49,3 +49,34 @@ The direct train audio archive is available but large (`train.tar.gz`, about 1.5
 ## Next Action
 
 Download the FLEURS Pashto train audio archive on a faster network path, extract it, and run `scripts/run_katib_asr.py` on a small smoke-test subset before scaling to the full 8-hour pilot.
+
+## Amin Sultani Long-Form Pilot
+
+Date: 2026-06-20
+
+The user reported that permission was obtained for the Amin Sultani YouTube channel. A permission record placeholder was created at `metadata/permissions/amin_sultani_permission_record.md`.
+
+Measured source inventory:
+
+- Channel: https://www.youtube.com/@AminSultani10/videos
+- Metadata inventory: 73 videos
+- Candidate duration: 18.56 hours
+
+Selected/downloaded pilot:
+
+- Pilot manifest: `metadata/amin_sultani_youtube_pilot.jsonl`
+- Pilot videos: 25
+- Pilot duration: 8.301 hours
+- Downloaded audio files: 25
+- Local raw audio size: 475 MB
+- Local raw audio directory: `data/raw/youtube_amin_sultani/audio`
+- Download status: complete
+- Format: audio-only `.m4a` streams
+
+Remaining work:
+
+- Install `ffmpeg`.
+- Convert raw audio to a consistent WAV format.
+- Segment long videos into sentence-like candidate clips.
+- Run Katib-ASR transcription.
+- Compute ASR/text/audio quality statistics.
