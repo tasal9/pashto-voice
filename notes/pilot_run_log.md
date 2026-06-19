@@ -12,14 +12,15 @@ FLEURS Pashto (`google/fleurs`, config `ps_af`) was selected for the first techn
 
 ## Status
 
-Blocked by remote dataset transfer in the current local environment.
+Metadata pilot completed. Audio download and Katib-ASR inference remain pending.
 
-Two attempts were made:
+Initial attempts through `datasets.load_dataset("google/fleurs", "ps_af")` and streaming mode stalled before producing rows. The alternative TSV path succeeded:
 
-1. Standard `datasets.load_dataset("google/fleurs", "ps_af")`.
-2. Streaming mode with `HF_HUB_DISABLE_XET=1`.
+1. Downloaded `data/ps_af/train.tsv` directly from the FLEURS Hugging Face repository.
+2. Built `metadata/fleurs_pashto_pilot.jsonl`.
+3. Computed `metadata/pilot_stats.json`.
 
-Both attempts stalled before producing the first row. The stuck Python download processes were terminated cleanly.
+The direct train audio archive is available but large (`train.tar.gz`, about 1.59 GB in the repo tree; the parquet export route exposed a roughly 1.9 GB file). The local network path was too slow for an interactive download.
 
 ## Verified Locally
 
@@ -28,7 +29,23 @@ Both attempts stalled before producing the first row. The stuck Python download 
 - Pashto normalizer executed successfully.
 - Pilot/stat scripts compile successfully.
 - Stats pipeline verified with `metadata/sample_manifest.jsonl`.
+- FLEURS train metadata downloaded successfully.
+- Pilot manifest and statistics generated successfully.
+
+## Pilot Statistics
+
+- Total hours: 8.0
+- Segments: 2,265
+- Source count: 1
+- Total tokens: 58,868
+- Unique word forms: 7,692
+- Mean segment duration: 12.716 s
+- Median segment duration: 11.880 s
+- Mean tokens per segment: 25.99
+- Mean Pashto character ratio: 0.9998
+- Mean Pashto-specific letter coverage: 0.4494
+- Gender clip counts: 1,689 male, 576 female
 
 ## Next Action
 
-Retry the pilot on a network path where Hugging Face dataset shards download normally, or manually download the FLEURS Pashto parquet/audio files and point the manifest builder at local files.
+Download the FLEURS Pashto train audio archive on a faster network path, extract it, and run `scripts/run_katib_asr.py` on a small smoke-test subset before scaling to the full 8-hour pilot.

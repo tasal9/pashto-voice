@@ -25,14 +25,15 @@ Create a large-scale, multi-speaker Pashto speech-text corpus suitable for text-
 
 ## Immediate Next Steps
 
-1. Retry the FLEURS Pashto pilot download on a network path where Hugging Face shards transfer normally.
-2. Request explicit redistribution permission from Books for Afghanistan and Darakht-e Danesh for long-form audiobook use.
-3. Run Katib-ASR on the first pilot manifest once audio is locally available.
-4. Fill final `TBD` statistics in the paper draft from `metadata/pilot_stats.json`.
+1. Download the FLEURS Pashto train audio archive on a faster network path and extract it locally.
+2. Send the permission requests in `docs/permission_request_books_for_afghanistan.md` and `docs/permission_request_darakht_e_danesh.md`.
+3. Run Katib-ASR on the pilot manifest once audio is locally available.
+4. Replace remaining long-form corpus placeholders after a permitted audiobook source is processed.
 
 ## Pilot Commands
 
 ```bash
 /Users/yaqoobtasal/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 scripts/load_fleurs_pilot.py --config ps_af --split train --target-hours 8 --streaming --out metadata/fleurs_pashto_pilot.jsonl
+/Users/yaqoobtasal/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 scripts/load_fleurs_pilot.py --tsv data/raw/fleurs/ps_af_train.tsv --split train --target-hours 8 --out metadata/fleurs_pashto_pilot.jsonl
 /Users/yaqoobtasal/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 scripts/pilot_stats.py metadata/fleurs_pashto_pilot.jsonl
 ```

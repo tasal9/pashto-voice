@@ -34,6 +34,10 @@ def compute_stats(rows: list[dict[str, Any]], transcript_field: str = "transcrip
     tokens = [tok for toks in tokenized for tok in toks]
     speakers = {str(r.get("speaker_id", "")).strip() for r in rows if str(r.get("speaker_id", "")).strip()}
     sources = {str(r.get("source_id", "")).strip() for r in rows if str(r.get("source_id", "")).strip()}
+    genders: dict[str, int] = {}
+    for row in rows:
+        gender = str(row.get("gender", "")).strip().lower() or "unknown"
+        genders[gender] = genders.get(gender, 0) + 1
     char_ratios = [pashto_character_ratio(txt) for txt in normalized if txt]
     coverage_scores = [pashto_specific_coverage(txt) for txt in normalized if txt]
 
@@ -50,6 +54,7 @@ def compute_stats(rows: list[dict[str, Any]], transcript_field: str = "transcrip
         "mean_tokens_per_segment": round(statistics.mean(len(t) for t in tokenized), 3) if rows else 0,
         "mean_pashto_character_ratio": round(statistics.mean(char_ratios), 4) if char_ratios else 0,
         "mean_pashto_specific_letter_coverage": round(statistics.mean(coverage_scores), 4) if coverage_scores else 0,
+        "gender_clip_counts": dict(sorted(genders.items())),
     }
 
 

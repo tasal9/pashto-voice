@@ -101,19 +101,19 @@ PashtoVoice will release audio segments, normalized transcripts, punctuation-res
 
 ## 4. Corpus Analysis
 
-This section will be filled after processing. The first attempted FLEURS Pashto pilot was blocked by remote dataset transfer in the local environment before any rows were produced, so no corpus statistics are reported here yet. Planned statistics include:
+The first 8-hour technical pilot was built from FLEURS Pashto train metadata. This pilot verifies source ingestion, Pashto text normalization, manifest generation, and corpus-statistics calculation. It does not yet include long-form audiobook data, speaker clustering, boundary optimization, or Katib-ASR inference because the FLEURS audio archive is not yet downloaded locally.
 
 | Metric | Processed ASR-Oriented Subset | Final TTS Subset |
 | --- | ---: | ---: |
-| Total hours | pending pilot transfer | pending long-form source clearance |
-| Segments | pending pilot transfer | pending long-form source clearance |
-| Speakers | not used for FLEURS/Common Voice pilot | pending permitted source |
-| Total tokens | pending pilot transfer | pending long-form source clearance |
-| Unique word forms | pending pilot transfer | pending long-form source clearance |
-| Mean segment duration | pending pilot transfer | pending long-form source clearance |
-| Median segment duration | pending pilot transfer | pending long-form source clearance |
+| Total hours | 8.0 | pending long-form source clearance |
+| Segments | 2,265 | pending long-form source clearance |
+| Speakers | not used for FLEURS pilot | pending permitted source |
+| Total tokens | 58,868 | pending long-form source clearance |
+| Unique word forms | 7,692 | pending long-form source clearance |
+| Mean segment duration | 12.716 s | pending long-form source clearance |
+| Median segment duration | 11.880 s | pending long-form source clearance |
 
-We will also report source distribution, dialect metadata where available, gender metadata where available, quality-score distributions, boundary-trimming statistics, and speaker-clustering purity against known metadata.
+The pilot contains one source (`google_fleurs_ps_af`). Clip-level gender metadata contains 1,689 male-labelled clips and 576 female-labelled clips. Mean tokens per segment is 25.99, mean Pashto character ratio is 0.9998, and mean Pashto-specific letter coverage is 0.4494. We will also report source distribution, dialect metadata where available, gender metadata where available, quality-score distributions, boundary-trimming statistics, and speaker-clustering purity against known metadata once a permitted long-form source is processed.
 
 ## 5. Evaluation: TTS Model Training
 
