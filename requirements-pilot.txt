@@ -1,3 +1,7 @@
 datasets
 soundfile
 jiwer
+yt-dlp
+transformers
+torch
+imageio-ffmpeg

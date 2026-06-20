@@ -101,19 +101,19 @@ PashtoVoice will release audio segments, normalized transcripts, punctuation-res
 
 ## 4. Corpus Analysis
 
-The first 8-hour technical pilot was built from FLEURS Pashto train metadata. This pilot verifies source ingestion, Pashto text normalization, manifest generation, and corpus-statistics calculation. After permission was reported for the Amin Sultani YouTube channel, we also selected and downloaded a first long-form raw-audio pilot from that channel. This long-form pilot verifies permission-gated source ingestion and raw audio acquisition, but it does not yet include segmentation, speaker clustering, boundary optimization, or Katib-ASR inference.
+The first 8-hour technical pilot was built from FLEURS Pashto train metadata. This pilot verifies source ingestion, Pashto text normalization, manifest generation, and corpus-statistics calculation. After permission was reported for the Amin Sultani YouTube channel, we selected, downloaded, converted, and segmented a first long-form raw-audio pilot from that channel. This long-form pilot verifies permission-gated source ingestion, raw audio acquisition, WAV conversion, silence-based segmentation, and lightweight audio quality scoring. It does not yet include speaker clustering, boundary optimization, or Katib-ASR inference.
 
 | Metric | Processed ASR-Oriented Subset | Final TTS Subset |
 | --- | ---: | ---: |
-| Total hours | 8.0 | 8.301 raw video hours |
-| Segments | 2,265 | pending segmentation |
+| Total hours | 8.0 | 8.248 segmented hours |
+| Segments | 2,265 | 2,317 |
 | Speakers | not used for FLEURS pilot | 1 known channel/narrator; clustering pending |
 | Total tokens | 58,868 | pending ASR/transcription |
 | Unique word forms | 7,692 | pending ASR/transcription |
-| Mean segment duration | 12.716 s | 19.92 min per source video |
-| Median segment duration | 11.880 s | 21.98 min per source video |
+| Mean segment duration | 12.716 s | 12.815 s |
+| Median segment duration | 11.880 s | 14.981 s |
 
-The FLEURS pilot contains one source (`google_fleurs_ps_af`). Clip-level gender metadata contains 1,689 male-labelled clips and 576 female-labelled clips. Mean tokens per segment is 25.99, mean Pashto character ratio is 0.9998, and mean Pashto-specific letter coverage is 0.4494. The Amin Sultani raw pilot contains 25 downloaded audio-only `.m4a` files totaling 475 MB locally, selected from a 73-video, 18.56-hour metadata inventory. We will also report source distribution, dialect metadata where available, quality-score distributions, boundary-trimming statistics, and speaker-clustering purity after segmentation and ASR processing.
+The FLEURS pilot contains one source (`google_fleurs_ps_af`). Clip-level gender metadata contains 1,689 male-labelled clips and 576 female-labelled clips. Mean tokens per segment is 25.99, mean Pashto character ratio is 0.9998, and mean Pashto-specific letter coverage is 0.4494. The Amin Sultani raw pilot contains 25 downloaded audio-only `.m4a` files totaling 475 MB locally, selected from a 73-video, 18.56-hour metadata inventory. These files were converted to 16 kHz mono WAV and segmented into 2,317 candidate clips using ffmpeg silence detection. Segment durations range from 3.001 to 18.000 seconds. Lightweight audio scoring gives a mean score of 99.66/100, with 2,288 high-quality segments (>=90), 29 acceptable segments (75-89), and no low-quality segments under the current scoring rules. We will also report transcript quality, boundary-trimming statistics, and speaker-clustering purity after ASR processing.
 
 ## 5. Evaluation: TTS Model Training
 

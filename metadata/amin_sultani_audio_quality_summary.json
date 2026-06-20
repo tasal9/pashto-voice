@@ -1,0 +1,11 @@
+{
+  "segments": 2317,
+  "mean_audio_quality_score": 99.66,
+  "median_audio_quality_score": 100.0,
+  "high_quality_ge_90": 2288,
+  "acceptable_75_89": 29,
+  "low_lt_75": 0,
+  "mean_rms_dbfs": -25.203,
+  "median_rms_dbfs": -25.651,
+  "segments_with_clipping": 0
+}

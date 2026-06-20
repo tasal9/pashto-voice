@@ -1,0 +1,8 @@
+{
+  "segments": 2317,
+  "total_hours": 8.248,
+  "mean_segment_duration_sec": 12.815,
+  "median_segment_duration_sec": 14.981,
+  "min_duration_sec": 3.001,
+  "max_duration_sec": 18.0
+}

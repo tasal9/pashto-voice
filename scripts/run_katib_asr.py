@@ -39,12 +39,14 @@ def main() -> int:
             filename = row.get("audio_filename") or row.get("audio_path")
             if not filename:
                 continue
-            audio_path = args.audio_dir / filename
+            audio_path = Path(filename)
+            if not audio_path.is_absolute() and not audio_path.exists():
+                audio_path = args.audio_dir / filename
             result = asr(str(audio_path))
             text = result["text"] if isinstance(result, dict) else str(result)
             out = {
                 "segment_id": row.get("segment_id"),
-                "audio_filename": filename,
+                "audio_path": str(audio_path),
                 "reference": row.get("transcript", ""),
                 "prediction": text,
                 "reference_normalized": normalize_pashto(row.get("transcript", ""), remove_punctuation=True),

@@ -1,0 +1,16 @@
+{
+  "total_hours": 8.248,
+  "segments": 2317,
+  "speakers": null,
+  "sources": 1,
+  "total_tokens": 0,
+  "unique_word_forms": 0,
+  "mean_segment_duration_sec": 12.815,
+  "median_segment_duration_sec": 14.981,
+  "mean_tokens_per_segment": 0,
+  "mean_pashto_character_ratio": 0,
+  "mean_pashto_specific_letter_coverage": 0,
+  "gender_clip_counts": {
+    "unknown": 2317
+  }
+}

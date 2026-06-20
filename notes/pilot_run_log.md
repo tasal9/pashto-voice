@@ -75,8 +75,38 @@ Selected/downloaded pilot:
 
 Remaining work:
 
-- Install `ffmpeg`.
-- Convert raw audio to a consistent WAV format.
-- Segment long videos into sentence-like candidate clips.
 - Run Katib-ASR transcription.
 - Compute ASR/text/audio quality statistics.
+
+## Amin Sultani Conversion, Segmentation, And Audio Quality
+
+Date: 2026-06-20
+
+Homebrew ffmpeg installation was blocked by permissions on `/usr/local/share/man/man8`, so the project uses the Python `imageio-ffmpeg` bundled ffmpeg executable.
+
+Completed:
+
+- Converted 25 `.m4a` files to 16 kHz mono WAV.
+- WAV directory: `data/processed/youtube_amin_sultani/wav`
+- WAV manifest: `metadata/amin_sultani_audio_manifest.jsonl`
+- Segmented the WAV files using ffmpeg `silencedetect`.
+- Segment directory: `data/processed/youtube_amin_sultani/segments`
+- Segment manifest: `metadata/amin_sultani_segments_manifest.jsonl`
+
+Segmentation results:
+
+- Segments: 2,317
+- Total segmented duration: 8.248 hours
+- Mean segment duration: 12.815 s
+- Median segment duration: 14.981 s
+- Min/max duration: 3.001 s / 18.000 s
+
+Audio quality summary:
+
+- Mean audio quality score: 99.66
+- Median audio quality score: 100.0
+- High quality segments (>=90): 2,288
+- Acceptable segments (75-89): 29
+- Low quality segments (<75): 0
+- Mean RMS: -25.203 dBFS
+- Segments with clipping: 0

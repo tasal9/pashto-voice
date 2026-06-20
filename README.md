@@ -29,10 +29,19 @@ Create a large-scale, multi-speaker Pashto speech-text corpus suitable for text-
 ## Immediate Next Steps
 
 1. Paste Amin Sultani permission terms into `metadata/permissions/amin_sultani_permission_record.md`.
-2. Install `ffmpeg` for audio conversion/segmentation.
-3. Convert the downloaded Amin Sultani `.m4a` files to WAV.
-4. Run segmentation and Katib-ASR on the converted long-form pilot audio.
-5. Replace remaining long-form corpus placeholders after segmentation/transcription.
+2. Run Katib-ASR on `metadata/amin_sultani_segments_manifest.jsonl`.
+3. Review a sample of ASR transcripts manually and tune segmentation thresholds if needed.
+4. Add transcript/text quality scoring after ASR output exists.
+5. Replace remaining paper placeholders after transcription.
+
+## Current Long-Form Pilot Status
+
+- Raw Amin Sultani audio downloaded: 25 `.m4a` files, 8.301 hours.
+- Converted WAV audio: 25 files, 16 kHz mono, under `data/processed/youtube_amin_sultani/wav`.
+- Segmented audio: 2,317 WAV segments, 8.248 hours, under `data/processed/youtube_amin_sultani/segments`.
+- Segment manifest: `metadata/amin_sultani_segments_manifest.jsonl`.
+- Audio quality summary: `metadata/amin_sultani_audio_quality_summary.json`.
+- Katib-ASR transcription: pending.
 
 ## Pilot Commands
 
