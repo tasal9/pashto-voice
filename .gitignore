@@ -5,6 +5,12 @@ data/
 __pycache__/
 *.pyc
 
+# Generated ASR, text-quality, and manual-review outputs should be reviewed
+# before they are intentionally released.
+metadata/*katib_asr*.jsonl
+metadata/*text_quality*.jsonl
+metadata/*manual_review*.jsonl
+
 # Private permission evidence, contact drafts, and source-rights records.
 private/
 metadata/permissions/

@@ -29,16 +29,6 @@ Create a large-scale, multi-speaker Pashto speech-text corpus suitable for text-
 
 `PashtoVoice` is used as a placeholder corpus name. Rename it before publication if you prefer a Pashto-language name.
 
-## Immediate Next Steps
-
-1. Store Amin Sultani permission terms outside tracked files, for example under ignored `private/permissions/`.
-2. Run a Katib-ASR smoke test on 25-50 Amin Sultani segments.
-3. Run resumable Katib-ASR on `metadata/amin_sultani_segments_manifest.jsonl`.
-4. Review a sample of ASR transcripts manually and tune segmentation thresholds if needed.
-5. Add transcript/text quality scoring after ASR output exists.
-6. Expand from the selected 25-video pilot to all permission-covered Amin Sultani videos.
-7. Replace remaining paper placeholders after transcription.
-
 ## Current Long-Form Pilot Status
 
 - Raw Amin Sultani audio downloaded: 25 `.m4a` files, 8.301 hours.

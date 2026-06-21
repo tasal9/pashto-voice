@@ -12,6 +12,7 @@ sys.path.append(str(scripts_dir))
 import pashto_normalize
 import audio_quality_stats
 import pilot_stats
+import text_quality_stats
 
 
 class TestPashtoNormalize(unittest.TestCase):
@@ -133,6 +134,30 @@ class TestPilotStats(unittest.TestCase):
         self.assertEqual(stats["sources"], 1)
         self.assertAlmostEqual(stats["total_hours"], 15.0 / 3600, places=3)
         self.assertEqual(stats["gender_clip_counts"], {"female": 1, "male": 1})
+
+
+class TestTextQualityStats(unittest.TestCase):
+    def test_score_text_good_pashto(self):
+        metrics = text_quality_stats.score_text("دا یو ښه Pashto نه، بلکې پښتو متن دی")
+
+        self.assertGreater(metrics["text_quality_score"], 0.5)
+        self.assertGreater(metrics["character_quality"], 0.9)
+        self.assertEqual(metrics["transcript_normalized"], "دا یو ښه نه، بلکې پښتو متن دی")
+
+    def test_score_text_repetition_penalty(self):
+        repeated = text_quality_stats.score_text("کتاب کتاب کتاب کتاب کتاب")
+        varied = text_quality_stats.score_text("دا یو ښه پښتو متن دی")
+
+        self.assertLess(repeated["repetition_quality"], varied["repetition_quality"])
+
+    def test_pick_text_prefers_prediction(self):
+        field, text = text_quality_stats.pick_text(
+            {"reference": "کتاب", "prediction": "قلم"},
+            text_quality_stats.DEFAULT_TEXT_FIELDS,
+        )
+
+        self.assertEqual(field, "prediction")
+        self.assertEqual(text, "قلم")
 
 
 if __name__ == "__main__":
