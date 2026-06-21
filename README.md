@@ -12,6 +12,7 @@ Create a large-scale, multi-speaker Pashto speech-text corpus suitable for text-
 - `docs/pashto_pipeline_plan.md` - implementation plan for building the corpus.
 - `docs/source_selection.md` - selected and deferred Pashto audio sources with licensing notes.
 - `docs/asr_baseline.md` - selected baseline ASR model and evaluation plan.
+- `docs/scale_up_roadmap.md` - staged roadmap for growing the corpus beyond the current pilot.
 - `metadata/schema.md` - proposed release metadata schema.
 - `scripts/pashto_normalize.py` - Pashto Arabic-script normalization utility.
 - `scripts/load_fleurs_pilot.py` - FLEURS Pashto pilot manifest builder.
@@ -29,10 +30,12 @@ Create a large-scale, multi-speaker Pashto speech-text corpus suitable for text-
 ## Immediate Next Steps
 
 1. Paste Amin Sultani permission terms into `metadata/permissions/amin_sultani_permission_record.md`.
-2. Run Katib-ASR on `metadata/amin_sultani_segments_manifest.jsonl`.
-3. Review a sample of ASR transcripts manually and tune segmentation thresholds if needed.
-4. Add transcript/text quality scoring after ASR output exists.
-5. Replace remaining paper placeholders after transcription.
+2. Run a Katib-ASR smoke test on 25-50 Amin Sultani segments.
+3. Run resumable Katib-ASR on `metadata/amin_sultani_segments_manifest.jsonl`.
+4. Review a sample of ASR transcripts manually and tune segmentation thresholds if needed.
+5. Add transcript/text quality scoring after ASR output exists.
+6. Expand from the selected 25-video pilot to all permission-covered Amin Sultani videos.
+7. Replace remaining paper placeholders after transcription.
 
 ## Current Long-Form Pilot Status
 
@@ -43,10 +46,22 @@ Create a large-scale, multi-speaker Pashto speech-text corpus suitable for text-
 - Audio quality summary: `metadata/amin_sultani_audio_quality_summary.json`.
 - Katib-ASR transcription: pending.
 
+## Setup
+
+Install the pilot dependencies before running ASR or dataset scripts:
+
+```bash
+python -m pip install -r requirements-pilot.txt
+```
+
+The ASR dependencies include `transformers` and `torch`, so the first install can take several minutes.
+
 ## Pilot Commands
 
 ```bash
-/Users/yaqoobtasal/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 scripts/load_fleurs_pilot.py --config ps_af --split train --target-hours 8 --streaming --out metadata/fleurs_pashto_pilot.jsonl
-/Users/yaqoobtasal/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 scripts/load_fleurs_pilot.py --tsv data/raw/fleurs/ps_af_train.tsv --split train --target-hours 8 --out metadata/fleurs_pashto_pilot.jsonl
-/Users/yaqoobtasal/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 scripts/pilot_stats.py metadata/fleurs_pashto_pilot.jsonl
+python scripts/load_fleurs_pilot.py --config ps_af --split train --target-hours 8 --streaming --out metadata/fleurs_pashto_pilot.jsonl
+python scripts/load_fleurs_pilot.py --tsv data/raw/fleurs/ps_af_train.tsv --split train --target-hours 8 --out metadata/fleurs_pashto_pilot.jsonl
+python scripts/pilot_stats.py metadata/fleurs_pashto_pilot.jsonl
+python scripts/run_katib_asr.py metadata/amin_sultani_segments_manifest.jsonl --limit 25 --device cpu --out metadata/katib_asr_smoke.jsonl --continue-on-error
+python scripts/run_katib_asr.py metadata/amin_sultani_segments_manifest.jsonl --resume --out metadata/amin_sultani_katib_asr.jsonl --continue-on-error --progress-every 25
 ```
