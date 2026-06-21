@@ -54,7 +54,7 @@ Download the FLEURS Pashto train audio archive on a faster network path, extract
 
 Date: 2026-06-20
 
-The user reported that permission was obtained for the Amin Sultani YouTube channel. A permission record placeholder was created at `metadata/permissions/amin_sultani_permission_record.md`.
+The user reported that permission was obtained for the Amin Sultani YouTube channel. Permission evidence and future permission-request drafts should stay outside tracked files, for example under ignored `private/permissions/`.
 
 Measured source inventory:
 

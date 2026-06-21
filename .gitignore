@@ -5,6 +5,11 @@ data/
 __pycache__/
 *.pyc
 
+# Private permission evidence, contact drafts, and source-rights records.
+private/
+metadata/permissions/
+docs/permission_request_*.md
+
 
 #Ignore vscode AI rules
 .github/instructions/codacy.instructions.md

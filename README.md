@@ -31,7 +31,7 @@ Create a large-scale, multi-speaker Pashto speech-text corpus suitable for text-
 
 ## Immediate Next Steps
 
-1. Paste Amin Sultani permission terms into `metadata/permissions/amin_sultani_permission_record.md`.
+1. Store Amin Sultani permission terms outside tracked files, for example under ignored `private/permissions/`.
 2. Run a Katib-ASR smoke test on 25-50 Amin Sultani segments.
 3. Run resumable Katib-ASR on `metadata/amin_sultani_segments_manifest.jsonl`.
 4. Review a sample of ASR transcripts manually and tune segmentation thresholds if needed.
