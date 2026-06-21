@@ -4,8 +4,10 @@
 from __future__ import annotations
 
 import argparse
+import array
 import json
 import math
+import sys
 import wave
 from pathlib import Path
 
@@ -19,12 +21,14 @@ def wav_stats(path: Path) -> dict[str, float]:
         frame_count = wf.getnframes()
     if sample_width != 2:
         return {"sample_rate": sample_rate, "channels": channels, "rms_dbfs": -120.0, "peak_dbfs": -120.0, "clipping_ratio": 0.0}
-    samples = [int.from_bytes(frames[i : i + 2], "little", signed=True) for i in range(0, len(frames), 2)]
+    samples = array.array("h", frames)
+    if sys.byteorder == "big":
+        samples.byteswap()
     if not samples:
         return {"sample_rate": sample_rate, "channels": channels, "rms_dbfs": -120.0, "peak_dbfs": -120.0, "clipping_ratio": 0.0}
-    peak = max(abs(x) for x in samples)
+    peak = max(max(samples), -min(samples))
     rms = math.sqrt(sum(x * x for x in samples) / len(samples))
-    clipping = sum(1 for x in samples if abs(x) >= 32760) / len(samples)
+    clipping = sum(1 for x in samples if x >= 32760 or x <= -32760) / len(samples)
     return {
         "sample_rate": sample_rate,
         "channels": channels,

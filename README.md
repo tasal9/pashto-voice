@@ -15,11 +15,13 @@ Create a large-scale, multi-speaker Pashto speech-text corpus suitable for text-
 - `docs/scale_up_roadmap.md` - staged roadmap for growing the corpus beyond the current pilot.
 - `metadata/schema.md` - proposed release metadata schema.
 - `scripts/pashto_normalize.py` - Pashto Arabic-script normalization utility.
+- `scripts/audio_quality_stats.py` - Optimized WAV audio quality stats computer (peak, RMS, clipping, scoring).
 - `scripts/load_fleurs_pilot.py` - FLEURS Pashto pilot manifest builder.
 - `scripts/pilot_stats.py` - pilot statistics calculator.
 - `scripts/inventory_youtube_channel.py` - metadata-only YouTube channel inventory helper; does not download media.
 - `scripts/select_youtube_pilot.py` - selects a target-duration YouTube pilot subset after permission.
 - `scripts/download_youtube_audio.py` - downloads permitted audio-only YouTube streams.
+- `tests/test_pipeline.py` - Unit and integration tests for normalization, stats, and audio scoring.
 - `notes/parsvoice_source_summary.md` - concise summary of the attached Persian paper.
 - `tmp/pdfs/2510.10774v3.txt` - extracted text from the attached PDF for local reference.
 
@@ -64,4 +66,12 @@ python scripts/load_fleurs_pilot.py --tsv data/raw/fleurs/ps_af_train.tsv --spli
 python scripts/pilot_stats.py metadata/fleurs_pashto_pilot.jsonl
 python scripts/run_katib_asr.py metadata/amin_sultani_segments_manifest.jsonl --limit 25 --device cpu --out metadata/katib_asr_smoke.jsonl --continue-on-error
 python scripts/run_katib_asr.py metadata/amin_sultani_segments_manifest.jsonl --resume --out metadata/amin_sultani_katib_asr.jsonl --continue-on-error --progress-every 25
+```
+
+## Testing
+
+To verify the correctness of the pipeline components (normalization maps, audio quality calculations, and pilot statistics), run the test suite:
+
+```bash
+python3 tests/test_pipeline.py
 ```
