@@ -6,7 +6,7 @@ This roadmap turns the current 8-hour long-form pilot into a larger Pashto speec
 
 - Amin Sultani long-form pilot: 25 videos, 2,317 segments, 8.248 segmented hours.
 - Audio quality is strong: mean score 99.66, no clipping, 2,288 segments at score 90 or higher.
-- Main blocker before scaling: ASR transcription and transcript quality scoring.
+- Main blocker before scaling: ASR transcription, followed by text-quality scoring over reviewed ASR outputs.
 
 ## Expansion Targets
 
@@ -23,7 +23,7 @@ This roadmap turns the current 8-hour long-form pilot into a larger Pashto speec
 1. Run a Katib-ASR smoke test on 25-50 segments.
 2. Manually inspect predictions for script normalization issues and obvious hallucinations.
 3. Run resumable ASR on the full `metadata/amin_sultani_segments_manifest.jsonl` file.
-4. Add text quality scoring over ASR predictions: Pashto character ratio, token count, repetition, empty prediction, and length mismatch.
+4. Run `scripts/text_quality_stats.py` over ASR predictions and inspect low-scoring rows.
 5. Merge audio and text quality into a release-candidate segment manifest.
 6. Expand from the selected 25-video pilot to all permission-covered Amin Sultani videos.
 
@@ -49,6 +49,12 @@ python scripts/run_katib_asr.py metadata/amin_sultani_segments_manifest.jsonl --
 ```
 
 If CUDA is available, replace `--device cpu` with `--device cuda`.
+
+Text quality scoring after ASR:
+
+```bash
+python scripts/text_quality_stats.py metadata/amin_sultani_katib_asr.jsonl --out metadata/amin_sultani_text_quality.jsonl --summary-out metadata/amin_sultani_text_quality_summary.json
+```
 
 ## Metrics To Track As The Corpus Grows
 
