@@ -50,13 +50,19 @@ Create a large-scale, multi-speaker Pashto speech-text corpus suitable for text-
 
 ## Setup
 
-Install the pilot dependencies before running ASR or dataset scripts:
+Install the lightweight pilot dependencies before running dataset, inventory, quality, or test scripts:
 
 ```bash
 python -m pip install -r requirements-pilot.txt
 ```
 
-The ASR dependencies include `transformers` and `torch`, so the first install can take several minutes.
+Install the ASR dependencies before running Katib-ASR:
+
+```bash
+python -m pip install -r requirements-asr.txt --retries 10 --timeout 120
+```
+
+The ASR dependencies include `transformers` and `torch`, so the first install can take several minutes and may need a stable network connection.
 
 ## Pilot Commands
 

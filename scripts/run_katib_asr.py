@@ -17,6 +17,7 @@ ASR_DEPENDENCY_HELP = """Missing ASR dependency: {package}
 
 Install the pilot dependencies with:
     python -m pip install -r requirements-pilot.txt
+    python -m pip install -r requirements-asr.txt --retries 10 --timeout 120
 
 Then rerun this command. For long ASR jobs, prefer --resume so completed segments are skipped.
 """
