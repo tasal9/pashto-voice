@@ -7,8 +7,8 @@
   "total_candidate_hours": 18.56,
   "mean_video_duration_min": 15.26,
   "median_video_duration_min": 15.17,
-  "license_status": "permission_granted_user_reported",
+  "license_status": "permission_granted_private_record",
   "download_allowed": true,
   "permission_date": "2026-06-20",
-  "notes": "Metadata-only inventory collected with yt-dlp --flat-playlist --skip-download before permission confirmation. User reported that permission has been obtained on 2026-06-20. Keep permission terms/evidence before public release."
+  "notes": "Metadata-only inventory collected with yt-dlp --flat-playlist --skip-download before permission confirmation. Permission records are intentionally not tracked in the public repository."
 }

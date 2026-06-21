@@ -9,7 +9,9 @@ __pycache__/
 # before they are intentionally released.
 metadata/*katib_asr*.jsonl
 metadata/*text_quality*.jsonl
+metadata/*text_quality*.json
 metadata/*manual_review*.jsonl
+metadata/*manual_review*.json
 
 # Private permission evidence, contact drafts, and source-rights records.
 private/

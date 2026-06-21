@@ -30,7 +30,7 @@ This list separates sources that are immediately usable for measurement from sou
 - URL: https://www.youtube.com/@AminSultani10/videos
 - Use: audiobook/podcast-style Pashto long-form speech.
 - Evidence: public search results describe the channel as hosting audiobooks, podcasts, information, and entertainment videos. A metadata-only `yt-dlp --flat-playlist --skip-download` inventory found 73 videos with duration metadata, totaling approximately 18.56 candidate hours.
-- Status: permission granted by user confirmation on 2026-06-20. Keep a private copy or summary of the permission terms outside tracked files, for example under ignored `private/permissions/`, before any public release.
+- Status: permission-gated source approved for the local pilot. Permission records are intentionally not tracked in the public repository.
 - Risks: some videos appear to be readings or translations of copyrighted books, so permission may need to cover both the narrator/channel audio and the underlying text/book rights.
 - Decision: selected as the first true long-form Pashto pilot source. If permission does not cover underlying book/text rights, keep affected titles internal or exclude them from public redistribution.
 
