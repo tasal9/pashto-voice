@@ -13,6 +13,7 @@ import pashto_normalize
 import audio_quality_stats
 import pilot_stats
 import text_quality_stats
+import export_manual_review
 
 
 class TestPashtoNormalize(unittest.TestCase):
@@ -158,6 +159,33 @@ class TestTextQualityStats(unittest.TestCase):
 
         self.assertEqual(field, "prediction")
         self.assertEqual(text, "قلم")
+
+
+class TestExportManualReview(unittest.TestCase):
+    def test_select_review_rows_prioritizes_low_scores(self):
+        rows = [
+            {"segment_id": "high", "text_quality_score": 0.95},
+            {"segment_id": "low", "text_quality_score": 0.30},
+            {"segment_id": "review", "text_quality_score": 0.70},
+        ]
+
+        selected = export_manual_review.select_review_rows(rows, limit=2)
+
+        self.assertEqual([row["segment_id"] for row in selected], ["low", "review"])
+
+    def test_review_row_defaults(self):
+        row = export_manual_review.review_row(
+            {
+                "segment_id": "seg1",
+                "audio_path": "audio.wav",
+                "prediction": "دا پښتو دی",
+                "transcript_normalized": "دا پښتو دی",
+            }
+        )
+
+        self.assertEqual(row["review_status"], "pending")
+        self.assertEqual(row["corrected_transcript"], "")
+        self.assertEqual(row["prediction_normalized"], "دا پښتو دی")
 
 
 if __name__ == "__main__":

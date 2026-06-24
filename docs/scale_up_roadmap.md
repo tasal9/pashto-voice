@@ -6,7 +6,7 @@ This roadmap turns the current 8-hour long-form pilot into a larger Pashto speec
 
 - Amin Sultani long-form pilot: 25 videos, 2,317 segments, 8.248 segmented hours.
 - Audio quality is strong: mean score 99.66, no clipping, 2,288 segments at score 90 or higher.
-- Main blocker before scaling: ASR transcription, followed by text-quality scoring over reviewed ASR outputs.
+- Main blocker before scaling: first Katib-ASR model-weight download, then ASR transcription and text-quality scoring over reviewed ASR outputs.
 
 ## Expansion Targets
 
@@ -20,12 +20,12 @@ This roadmap turns the current 8-hour long-form pilot into a larger Pashto speec
 
 ## Near-Term Workstream
 
-1. Run a Katib-ASR smoke test on 25-50 segments.
-2. Manually inspect predictions for script normalization issues and obvious hallucinations.
-3. Run resumable ASR on the full `metadata/amin_sultani_segments_manifest.jsonl` file.
-4. Run `scripts/text_quality_stats.py` over ASR predictions and inspect low-scoring rows.
-5. Merge audio and text quality into a release-candidate segment manifest.
-6. Expand from the selected 25-video pilot to all permission-covered Amin Sultani videos.
+1. Finish Katib-ASR transcription for `metadata/amin_sultani_segments_manifest.jsonl`.
+2. Run text-quality scoring and manual review on ASR outputs.
+3. Use Common Voice and FLEURS for ASR benchmarking and normalization checks.
+4. Preserve exact Amin Sultani permission terms before any public release.
+5. Request or confirm additional permissions from Books for Afghanistan and Darakht-e Danesh.
+6. Scale from the 25-video pilot to all permission-covered Amin Sultani videos.
 
 ## Source Expansion Rules
 
@@ -36,16 +36,22 @@ This roadmap turns the current 8-hour long-form pilot into a larger Pashto speec
 
 ## Recommended Commands
 
+Predownload Katib-ASR model files:
+
+```bash
+HF_HUB_DISABLE_XET=1 .venv/bin/python -c "from huggingface_hub import snapshot_download; snapshot_download('uzair0/Katib-ASR', allow_patterns=['config.json','generation_config.json','model.safetensors','processor_config.json','tokenizer.json','tokenizer_config.json'], resume_download=True)"
+```
+
 Smoke-test ASR:
 
 ```bash
-python scripts/run_katib_asr.py metadata/amin_sultani_segments_manifest.jsonl --limit 25 --device cpu --out metadata/katib_asr_smoke.jsonl --continue-on-error
+.venv/bin/python scripts/run_katib_asr.py metadata/amin_sultani_segments_manifest.jsonl --limit 25 --device cpu --out metadata/katib_asr_smoke.jsonl --continue-on-error
 ```
 
 Full resumable ASR run:
 
 ```bash
-python scripts/run_katib_asr.py metadata/amin_sultani_segments_manifest.jsonl --resume --out metadata/amin_sultani_katib_asr.jsonl --continue-on-error --progress-every 25
+.venv/bin/python scripts/run_katib_asr.py metadata/amin_sultani_segments_manifest.jsonl --resume --out metadata/amin_sultani_katib_asr.jsonl --continue-on-error --progress-every 25
 ```
 
 If CUDA is available, replace `--device cpu` with `--device cuda`.
@@ -53,7 +59,13 @@ If CUDA is available, replace `--device cpu` with `--device cuda`.
 Text quality scoring after ASR:
 
 ```bash
-python scripts/text_quality_stats.py metadata/amin_sultani_katib_asr.jsonl --out metadata/amin_sultani_text_quality.jsonl --summary-out metadata/amin_sultani_text_quality_summary.json
+.venv/bin/python scripts/text_quality_stats.py metadata/amin_sultani_katib_asr.jsonl --out metadata/amin_sultani_text_quality.jsonl --summary-out metadata/amin_sultani_text_quality_summary.json
+```
+
+Manual review export after text-quality scoring:
+
+```bash
+.venv/bin/python scripts/export_manual_review.py metadata/amin_sultani_text_quality.jsonl --out metadata/amin_sultani_manual_review.csv --limit 100
 ```
 
 ## Metrics To Track As The Corpus Grows

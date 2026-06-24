@@ -4,6 +4,7 @@ data/
 .DS_Store
 __pycache__/
 *.pyc
+.venv/
 
 # Generated ASR, text-quality, and manual-review outputs should be reviewed
 # before they are intentionally released.

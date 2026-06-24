@@ -1,0 +1,60 @@
+{
+  "title": "PashtoVoice: Permissioned Pashto Long-Form Speech Pilot",
+  "short_name": "pashtovoice-amin-sultani-pilot",
+  "language": "Pashto",
+  "primary_tasks": [
+    "automatic speech recognition",
+    "text-to-speech",
+    "speech-text alignment",
+    "punctuation restoration",
+    "text normalization",
+    "low-resource speech-language research"
+  ],
+  "about_dataset": "PashtoVoice is a research dataset project for Pashto speech and language technology, focused on creating reusable data for ASR, TTS, speech-text alignment, punctuation restoration, text normalization, and future OCR/NLP evaluation. The current pilot contains a permission-approved long-form Pashto audio source from Amin Sultani's YouTube channel. We inventoried 73 candidate videos totaling about 18.56 hours, selected a first 25-video pilot totaling 8.301 raw hours, downloaded audio-only streams with permission, converted them to 16 kHz mono WAV, and segmented them into 2,317 candidate speech clips totaling 8.248 hours. Lightweight audio checks show strong quality: mean score 99.66/100, 2,288 high-quality segments, 29 acceptable segments, and no low-quality segments under the current scoring rules. We also maintain an 8-hour FLEURS Pashto metadata pilot for normalization and benchmarking, but the primary upload candidate is the permission-approved Amin Sultani long-form audio pilot. The project includes source-selection notes, permission tracking, metadata schemas, Pashto normalization utilities, segmentation scripts, audio-quality scoring, and planned Katib-ASR transcription. We will not include sources whose terms prohibit AI training or redistribution, such as Shariat Daily, unless explicit permission is obtained.",
+  "collection_summary": {
+    "source": "Amin Sultani YouTube channel",
+    "source_url": "https://www.youtube.com/@AminSultani10/videos",
+    "permission_status": "permission granted, user-reported; exact terms must be preserved before public release",
+    "collection_steps": [
+      "metadata-only channel inventory",
+      "permission confirmation by user",
+      "25-video pilot selection",
+      "audio-only stream download",
+      "16 kHz mono WAV conversion",
+      "ffmpeg silence-based segmentation",
+      "lightweight audio quality scoring"
+    ]
+  },
+  "current_statistics": {
+    "candidate_inventory_videos": 73,
+    "candidate_inventory_hours": 18.56,
+    "pilot_videos": 25,
+    "raw_pilot_hours": 8.301,
+    "segmented_hours": 8.248,
+    "segments": 2317,
+    "mean_segment_duration_sec": 12.815,
+    "median_segment_duration_sec": 14.981,
+    "audio_quality_mean": 99.66,
+    "audio_quality_high_ge_90": 2288,
+    "audio_quality_acceptable_75_89": 29,
+    "audio_quality_low_lt_75": 0
+  },
+  "included_project_files": [
+    "paper/pashtovoice_draft.md",
+    "docs/source_selection.md",
+    "docs/mdc_upload_package.md",
+    "metadata/schema.md",
+    "metadata/amin_sultani_youtube_inventory.jsonl",
+    "metadata/amin_sultani_youtube_pilot.jsonl",
+    "metadata/amin_sultani_audio_manifest.jsonl",
+    "metadata/amin_sultani_segments_manifest.jsonl",
+    "metadata/amin_sultani_audio_quality_summary.json"
+  ],
+  "not_yet_complete": [
+    "exact permission terms need to be preserved",
+    "Katib-ASR transcription pending",
+    "text quality scoring pending",
+    "manual review pending",
+    "final TTS-ready subset pending"
+  ]
+}

@@ -110,3 +110,47 @@ Audio quality summary:
 - Low quality segments (<75): 0
 - Mean RMS: -25.203 dBFS
 - Segments with clipping: 0
+
+## ASR Environment Check
+
+Date: 2026-06-25
+
+Completed:
+
+- Created a project-local `.venv` because system Python rejects direct package installs under PEP 668.
+- Installed pilot and ASR dependencies in `.venv`.
+- Pinned ASR requirements to `transformers>=4.38,<4.40` and `numpy<2` so the available local `torch==2.2.2` build can load without the Transformers 5 / NumPy 2 ABI failures.
+- Re-ran `tests/test_pipeline.py` successfully in the virtual environment.
+
+ASR smoke-test status:
+
+- `scripts/run_katib_asr.py` now reaches Hugging Face model download.
+- First Katib-ASR load starts downloading a 3.09 GB `model.safetensors` file.
+- Disabling Xet transfer with `HF_HUB_DISABLE_XET=1` moved the regular Hugging Face cache from metadata-only to about 14 MB, including a partial 10 MB weight download.
+- Local download speed was too slow for an interactive run, so transcription was stopped before any ASR rows were written.
+
+Canonical processing order:
+
+1. Finish Katib-ASR transcription for Amin Sultani segments.
+2. Run text-quality scoring and manual review on ASR outputs.
+3. Use Common Voice and FLEURS for ASR benchmarking and normalization checks.
+4. Preserve exact Amin Sultani permission terms before any public release.
+5. Request or confirm additional permissions from Books for Afghanistan and Darakht-e Danesh.
+6. Scale from the 25-video pilot to all permission-covered Amin Sultani videos.
+
+Next action:
+
+Run the smoke test on a faster network path, preferably with GPU available:
+
+```bash
+HF_HUB_DISABLE_XET=1 .venv/bin/python -c "from huggingface_hub import snapshot_download; snapshot_download('uzair0/Katib-ASR', allow_patterns=['config.json','generation_config.json','model.safetensors','processor_config.json','tokenizer.json','tokenizer_config.json'], resume_download=True)"
+.venv/bin/python scripts/run_katib_asr.py metadata/amin_sultani_segments_manifest.jsonl --limit 25 --device cpu --out metadata/katib_asr_smoke.jsonl --continue-on-error
+```
+
+After the smoke test succeeds, run full resumable ASR and text quality scoring:
+
+```bash
+.venv/bin/python scripts/run_katib_asr.py metadata/amin_sultani_segments_manifest.jsonl --resume --out metadata/amin_sultani_katib_asr.jsonl --continue-on-error --progress-every 25
+.venv/bin/python scripts/text_quality_stats.py metadata/amin_sultani_katib_asr.jsonl --out metadata/amin_sultani_text_quality.jsonl --summary-out metadata/amin_sultani_text_quality_summary.json
+.venv/bin/python scripts/export_manual_review.py metadata/amin_sultani_text_quality.jsonl --out metadata/amin_sultani_manual_review.csv --limit 100
+```
