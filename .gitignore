@@ -21,3 +21,7 @@ docs/permission_request_*.md
 
 #Ignore vscode AI rules
 .github/instructions/codacy.instructions.md
+
+
+#Ignore insiders AI rules
+.github\instructions\codacy.instructions.md
