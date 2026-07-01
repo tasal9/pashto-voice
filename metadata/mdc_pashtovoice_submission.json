@@ -14,10 +14,10 @@
   "collection_summary": {
     "source": "Amin Sultani YouTube channel",
     "source_url": "https://www.youtube.com/@AminSultani10/videos",
-    "permission_status": "permission granted, user-reported; exact terms must be preserved before public release",
+    "permission_status": "permission granted; source-rights records are kept outside tracked public files",
     "collection_steps": [
       "metadata-only channel inventory",
-      "permission confirmation by user",
+      "permission-gated pilot approval",
       "25-video pilot selection",
       "audio-only stream download",
       "16 kHz mono WAV conversion",
@@ -51,7 +51,7 @@
     "metadata/amin_sultani_audio_quality_summary.json"
   ],
   "not_yet_complete": [
-    "exact permission terms need to be preserved",
+    "source-rights records need final verification before public release",
     "Katib-ASR transcription pending",
     "text quality scoring pending",
     "manual review pending",

@@ -65,6 +65,6 @@ This list separates sources that are immediately usable for measurement from sou
 1. Finish Katib-ASR transcription for the Amin Sultani segments.
 2. Run text-quality scoring and manual review on ASR outputs.
 3. Use Common Voice and FLEURS for ASR benchmarking and normalization checks.
-4. Preserve exact Amin Sultani permission terms before any public release.
+4. Keep source-rights records outside tracked files and verify redistribution scope before public release.
 5. Request or confirm additional permissions from Books for Afghanistan and Darakht-e Danesh.
 6. Scale from the 25-video pilot to all permission-covered Amin Sultani videos.
