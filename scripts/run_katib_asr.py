@@ -10,6 +10,8 @@ import time
 from pathlib import Path
 from typing import Any
 
+import numpy as np
+
 from pashto_normalize import normalize_pashto
 
 
@@ -74,6 +76,25 @@ def output_row(row: dict[str, Any], audio_path: Path, text: str) -> dict[str, An
     }
 
 
+def read_audio_input(audio_path: Path) -> dict[str, Any]:
+    import soundfile as sf  # type: ignore[reportMissingImports]
+
+    audio, sampling_rate = sf.read(audio_path, dtype="float32", always_2d=False)
+    if isinstance(audio, np.ndarray) and audio.ndim > 1:
+        audio = audio.mean(axis=1)
+    return {"array": audio, "sampling_rate": sampling_rate}
+
+
+def resolve_torch_dtype(name: str) -> Any:
+    import torch  # type: ignore[reportMissingImports]
+
+    return {
+        "float32": torch.float32,
+        "float16": torch.float16,
+        "bfloat16": torch.bfloat16,
+    }[name]
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Transcribe pilot audio with uzair0/Katib-ASR.")
     parser.add_argument("manifest", type=Path)
@@ -85,9 +106,26 @@ def main() -> int:
     parser.add_argument("--continue-on-error", action="store_true", help="Write error rows and continue when a segment fails.")
     parser.add_argument("--progress-every", type=int, default=25, help="Print progress every N processed rows.")
     parser.add_argument("--device", default="cuda", help="Use cuda, cpu, or a transformers device index.")
+    parser.add_argument(
+        "--torch-dtype",
+        choices=("float32", "float16", "bfloat16"),
+        default="float32",
+        help="Torch dtype for model inference. Use float16 or bfloat16 on compatible GPUs.",
+    )
+    parser.add_argument("--model", default="uzair0/Katib-ASR", help="ASR model checkpoint to load.")
+    parser.add_argument(
+        "--tokenizer",
+        default="openai/whisper-large-v3",
+        help="Tokenizer checkpoint to load. Defaults to Whisper large-v3 for compatibility with Katib-ASR.",
+    )
+    parser.add_argument(
+        "--feature-extractor",
+        default="openai/whisper-large-v3",
+        help="Feature extractor checkpoint to load. Defaults to Whisper large-v3 for compatibility with Katib-ASR.",
+    )
     args = parser.parse_args()
 
-    for package in ("transformers", "torch"):
+    for package in ("transformers", "torch", "soundfile"):
         if importlib.util.find_spec(package) is None:
             parser.exit(1, ASR_DEPENDENCY_HELP.format(package=package))
 
@@ -95,8 +133,10 @@ def main() -> int:
 
     asr = pipeline(
         "automatic-speech-recognition",
-        model="uzair0/Katib-ASR",
-        torch_dtype="auto",
+        model=args.model,
+        tokenizer=args.tokenizer,
+        feature_extractor=args.feature_extractor,
+        torch_dtype=resolve_torch_dtype(args.torch_dtype),
         device=args.device,
         chunk_length_s=30,
     )
@@ -118,7 +158,7 @@ def main() -> int:
         for row in rows:
             try:
                 audio_path = resolve_audio_path(row, audio_dir=args.audio_dir, project_root=project_root)
-                result = asr(str(audio_path))
+                result = asr(read_audio_input(audio_path))
                 text = result["text"] if isinstance(result, dict) else str(result)
                 out = output_row(row, audio_path, text)
             except Exception as exc:
