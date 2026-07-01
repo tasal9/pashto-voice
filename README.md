@@ -38,8 +38,10 @@ Create a large-scale, multi-speaker Pashto speech-text corpus suitable for text-
 - Segmented audio: 2,317 WAV segments, 8.248 hours, under `data/processed/youtube_amin_sultani/segments`.
 - Segment manifest: `metadata/amin_sultani_segments_manifest.jsonl`.
 - Audio quality summary: `metadata/amin_sultani_audio_quality_summary.json`.
-- Katib-ASR transcription: pending on first model-weight download.
-- Katib-ASR cache status: metadata/tokenizer files started; `model.safetensors` is 3.09 GB and needs a stable network window before ASR can begin.
+- Katib-ASR transcription: 10-row CPU pilot completed; full 2,317-segment run remains pending.
+- Katib-ASR cache status: `model.safetensors` is downloaded locally; CPU inference is slow, so use a GPU or an overnight resumable run for the full pilot.
+- Text-quality pilot: 10 ASR rows scored, mean score 0.7422, 3 high-quality rows, 7 review rows, 0 low-quality rows.
+- Manual-review pilot CSV: `metadata/amin_sultani_manual_review_pilot10.csv`.
 
 ## Immediate Next Steps
 

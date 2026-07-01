@@ -129,13 +129,19 @@ def main() -> int:
         if importlib.util.find_spec(package) is None:
             parser.exit(1, ASR_DEPENDENCY_HELP.format(package=package))
 
-    from transformers import pipeline  # type: ignore[reportMissingImports]
+    from transformers import pipeline, AutoTokenizer, AutoFeatureExtractor  # type: ignore[reportMissingImports]
+
+    # Some tokenizer json files on disk may not be compatible with the
+    # fast (rust) tokenizers. Try to load a slow tokenizer explicitly to
+    # avoid TokenizerFast.from_file errors (see traceback in issue).
+    tokenizer = AutoTokenizer.from_pretrained(args.tokenizer, use_fast=False)
+    feature_extractor = AutoFeatureExtractor.from_pretrained(args.feature_extractor)
 
     asr = pipeline(
         "automatic-speech-recognition",
         model=args.model,
-        tokenizer=args.tokenizer,
-        feature_extractor=args.feature_extractor,
+        tokenizer=tokenizer,
+        feature_extractor=feature_extractor,
         torch_dtype=resolve_torch_dtype(args.torch_dtype),
         device=args.device,
         chunk_length_s=30,

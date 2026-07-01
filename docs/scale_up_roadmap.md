@@ -6,7 +6,8 @@ This roadmap turns the current 8-hour long-form pilot into a larger Pashto speec
 
 - Amin Sultani long-form pilot: 25 videos, 2,317 segments, 8.248 segmented hours.
 - Audio quality is strong: mean score 99.66, no clipping, 2,288 segments at score 90 or higher.
-- Main blocker before scaling: first Katib-ASR model-weight download, then ASR transcription and text-quality scoring over reviewed ASR outputs.
+- Katib-ASR is locally loadable and a 10-row CPU pilot completed. Full ASR remains the main blocker before scaling because CPU inference is slow.
+- Text-quality pilot: 10 ASR rows scored, mean score 0.7422, 3 high-quality rows, 7 review rows, 0 low-quality rows.
 
 ## Expansion Targets
 
@@ -55,6 +56,8 @@ Full resumable ASR run:
 ```
 
 If CUDA is available, replace `--device cpu` with `--device cuda`.
+
+On CPU, schedule the full run as a long/overnight job. The first 10 pilot rows took about 10.2 minutes.
 
 Text quality scoring after ASR:
 

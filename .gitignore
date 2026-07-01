@@ -13,6 +13,7 @@ metadata/*text_quality*.jsonl
 metadata/*text_quality*.json
 metadata/*manual_review*.jsonl
 metadata/*manual_review*.json
+metadata/*manual_review*.csv
 
 # Private permission evidence, contact drafts, and source-rights records.
 private/

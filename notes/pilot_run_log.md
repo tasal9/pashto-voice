@@ -154,3 +154,31 @@ After the smoke test succeeds, run full resumable ASR and text quality scoring:
 .venv/bin/python scripts/text_quality_stats.py metadata/amin_sultani_katib_asr.jsonl --out metadata/amin_sultani_text_quality.jsonl --summary-out metadata/amin_sultani_text_quality_summary.json
 .venv/bin/python scripts/export_manual_review.py metadata/amin_sultani_text_quality.jsonl --out metadata/amin_sultani_manual_review.csv --limit 100
 ```
+
+## Katib-ASR Pilot Output
+
+Date: 2026-07-01
+
+Completed:
+
+- Verified `.venv` dependencies: `torch==2.2.2`, `transformers==4.39.3`, `huggingface_hub==0.36.2`, `numpy==1.26.4`, and `jiwer`.
+- Confirmed the Katib-ASR Hugging Face cache now contains the full local `model.safetensors` weight file.
+- Ran a one-row smoke test successfully: `metadata/katib_asr_smoke.jsonl`.
+- Ran a 10-row CPU ASR pilot before stopping the interactive job: `metadata/amin_sultani_katib_asr_pilot25.jsonl`.
+- Generated text-quality output: `metadata/amin_sultani_text_quality_pilot10.jsonl`.
+- Generated text-quality summary: `metadata/amin_sultani_text_quality_summary_pilot10.json`.
+- Generated manual-review CSV: `metadata/amin_sultani_manual_review_pilot10.csv`.
+
+Measured text-quality pilot results:
+
+- Rows scored: 10
+- Mean text-quality score: 0.7422
+- Median text-quality score: 0.7722
+- Min/max text-quality score: 0.6458 / 0.8155
+- High-quality rows: 3
+- Review rows: 7
+- Low-quality rows: 0
+
+Runtime note:
+
+- The 10-row CPU ASR pilot took about 10.2 minutes. The full 2,317-segment ASR pass should be run on CUDA if available, or as a long resumable CPU job.
