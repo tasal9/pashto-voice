@@ -20,7 +20,7 @@ Audio quality scoring is complete for the segmented pilot. The current lightweig
 
 The project also includes a separate FLEURS Pashto metadata pilot used for benchmarking and text normalization validation. That pilot contains 2,265 segments, 8.0 hours, 58,868 tokens, and 7,692 unique word forms. FLEURS is not the main long-form upload candidate; it is maintained as a reference/benchmark source.
 
-All sources are handled conservatively. The project tracks permission and source restrictions before release. Amin Sultani is marked as permission-granted based on user confirmation, with a permission record placeholder maintained in `metadata/permissions/amin_sultani_permission_record.md`. Sources with unclear or restrictive terms remain excluded from training/release manifests. For example, Shariat Daily is marked as not permitted for AI training because its `robots.txt` content signal includes `ai-train=no`, unless explicit written permission is later obtained.
+All sources are handled conservatively. The project tracks permission and source restrictions before release, while source-rights records are intentionally kept outside tracked public files. Sources with unclear or restrictive terms remain excluded from training/release manifests. For example, Shariat Daily is marked as not permitted for AI training because its `robots.txt` content signal includes `ai-train=no`, unless explicit written permission is later obtained.
 
 ## Current Dataset Numbers
 
@@ -41,7 +41,7 @@ All sources are handled conservatively. The project tracks permission and source
 
 ## Upload Caveats
 
-- Public release should wait until the exact Amin Sultani permission terms are pasted into the permission record.
+- Public release should wait until source-rights records are verified outside tracked repository files.
 - Katib-ASR transcription is pending.
 - Text/transcript quality scoring is pending ASR output.
 - Final TTS-ready subset statistics are pending ASR review and filtering.

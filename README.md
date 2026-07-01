@@ -22,10 +22,10 @@ Create a large-scale, multi-speaker Pashto speech-text corpus suitable for text-
 - `scripts/inventory_youtube_channel.py` - metadata-only YouTube channel inventory helper; does not download media.
 - `scripts/select_youtube_pilot.py` - selects a target-duration YouTube pilot subset after permission.
 - `scripts/download_youtube_audio.py` - downloads permitted audio-only YouTube streams.
+- `scripts/text_quality_stats.py` - scores Pashto transcript quality after ASR.
 - `scripts/export_manual_review.py` - exports scored ASR rows to a manual-review CSV.
 - `tests/test_pipeline.py` - Unit and integration tests for normalization, stats, and audio scoring.
 - `notes/parsvoice_source_summary.md` - concise summary of the attached Persian paper.
-- `tmp/pdfs/2510.10774v3.txt` - extracted text from the attached PDF for local reference.
 
 ## Working Name
 
@@ -40,15 +40,6 @@ Create a large-scale, multi-speaker Pashto speech-text corpus suitable for text-
 - Audio quality summary: `metadata/amin_sultani_audio_quality_summary.json`.
 - Katib-ASR transcription: pending on first model-weight download.
 - Katib-ASR cache status: metadata/tokenizer files started; `model.safetensors` is 3.09 GB and needs a stable network window before ASR can begin.
-
-## Immediate Next Steps
-
-1. Finish Katib-ASR transcription for `metadata/amin_sultani_segments_manifest.jsonl`.
-2. Run text-quality scoring and manual review on ASR outputs.
-3. Use Common Voice and FLEURS for ASR benchmarking and normalization checks.
-4. Preserve exact Amin Sultani permission terms before any public release.
-5. Request or confirm additional permissions from Books for Afghanistan and Darakht-e Danesh.
-6. Scale from the 25-video pilot to all permission-covered Amin Sultani videos.
 
 ## Setup
 
