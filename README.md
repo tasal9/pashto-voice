@@ -75,7 +75,7 @@ Install the ASR dependencies before running Katib-ASR:
 .venv\Scripts\python.exe -m pip install -r requirements-asr.txt --retries 10 --timeout 120
 ```
 
-The ASR dependencies include `transformers` and `torch`, so the first install can take several minutes and may need a stable network connection. Katib-ASR model loading also downloads a 3.09 GB Hugging Face model cache on the first run; use a fast network path and prefer a CUDA GPU for full-pilot inference.
+The ASR dependencies include `transformers`, `torch`, and `openai-whisper`, so the first install can take several minutes and may need a stable network connection. Katib-ASR model loading also downloads a 3.09 GB Hugging Face model cache on the first run; use a fast network path and prefer a CUDA GPU for full-pilot inference.
 
 ## Pilot Commands
 
