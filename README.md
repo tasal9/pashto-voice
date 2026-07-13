@@ -14,6 +14,7 @@ Create a large-scale, multi-speaker Pashto speech-text corpus suitable for text-
 - `docs/asr_baseline.md` - selected baseline ASR model and evaluation plan.
 - `docs/scale_up_roadmap.md` - staged roadmap for growing the corpus beyond the current pilot.
 - `docs/mdc_upload_package.md` - single Mozilla Data Collective upload summary for the combined Pashto voice/text/OCR research package.
+- `docs/common_voice_format.md` - PashtoVoice Common Voice-style corpus format specification.
 - `metadata/schema.md` - proposed release metadata schema.
 - `scripts/pashto_normalize.py` - Pashto Arabic-script normalization utility.
 - `scripts/audio_quality_stats.py` - Optimized WAV audio quality stats computer (peak, RMS, clipping, scoring).
@@ -24,6 +25,9 @@ Create a large-scale, multi-speaker Pashto speech-text corpus suitable for text-
 - `scripts/download_youtube_audio.py` - downloads permitted audio-only YouTube streams.
 - `scripts/text_quality_stats.py` - scores Pashto transcript quality after ASR.
 - `scripts/export_manual_review.py` - exports scored ASR rows to a manual-review CSV.
+- `scripts/export_common_voice.py` - exports a PashtoVoice manifest to a Mozilla Common Voice-style corpus package.
+- `scripts/validate_common_voice.py` - validates a Common Voice-style corpus package.
+- `scripts/package_corpus.py` - packages a validated corpus into a release archive.
 - `tests/test_pipeline.py` - Unit and integration tests for normalization, stats, and audio scoring.
 - `notes/parsvoice_source_summary.md` - concise summary of the attached Persian paper.
 
@@ -38,6 +42,8 @@ Create a large-scale, multi-speaker Pashto speech-text corpus suitable for text-
 - Segmented audio: 2,317 WAV segments, 8.248 hours, under `data/processed/youtube_amin_sultani/segments`.
 - Segment manifest: `metadata/amin_sultani_segments_manifest.jsonl`.
 - Audio quality summary: `metadata/amin_sultani_audio_quality_summary.json`.
+- Common Voice-style export: `pashtovoice_commonvoice/` (2,317 clips, transcripts pending ASR).
+- Release archive: `dist/pashtovoice_commonvoice.tar.gz` (metadata only until audio is bundled).
 - Katib-ASR transcription: 10-row CPU pilot completed; full 2,317-segment run remains pending.
 - Katib-ASR cache status: `model.safetensors` is downloaded locally; CPU inference is slow, so use a GPU or an overnight resumable run for the full pilot.
 - Text-quality pilot: 10 ASR rows scored, mean score 0.7422, 3 high-quality rows, 7 review rows, 0 low-quality rows.
@@ -73,9 +79,28 @@ HF_HUB_DISABLE_XET=1 .venv/bin/python -c "from huggingface_hub import snapshot_d
 .venv/bin/python scripts/export_manual_review.py metadata/amin_sultani_text_quality.jsonl --out metadata/amin_sultani_manual_review.csv --limit 100
 ```
 
+## Common Voice-Style Export
+
+After segments exist and (optionally) ASR outputs are available, export a Mozilla Common Voice-style corpus package:
+
+```bash
+PYTHONPATH=scripts .venv/bin/python scripts/export_common_voice.py \
+  metadata/amin_sultani_segments_manifest.jsonl \
+  --quality metadata/amin_sultani_audio_quality_scores.jsonl \
+  --asr metadata/amin_sultani_katib_asr.jsonl \
+  --source-name "Amin Sultani YouTube Pilot" \
+  --out-dir pashtovoice_commonvoice \
+  --copy-audio
+
+PYTHONPATH=scripts .venv/bin/python scripts/validate_common_voice.py pashtovoice_commonvoice
+PYTHONPATH=scripts .venv/bin/python scripts/package_corpus.py pashtovoice_commonvoice --out dist/pashtovoice_commonvoice.tar.gz
+```
+
+The exporter produces `validated.tsv`, `other.tsv`, `invalidated.tsv`, `reported.tsv`, `clips/`, `README.md`, `LICENSE.md`, `CITATION.bib`, and `corpus_stats.json`. See `docs/common_voice_format.md` for the full schema.
+
 ## Testing
 
-To verify the correctness of the pipeline components (normalization maps, audio quality calculations, and pilot statistics), run the test suite:
+To verify the correctness of the pipeline components (normalization, audio quality calculations, pilot statistics, and Common Voice export), run the test suite:
 
 ```bash
 .venv/bin/python tests/test_pipeline.py

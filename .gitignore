@@ -1,6 +1,8 @@
 tmp/
 output/pdf/
 data/
+pashtovoice_commonvoice/
+dist/
 .DS_Store
 __pycache__/
 *.pyc
