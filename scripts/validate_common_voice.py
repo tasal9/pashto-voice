@@ -11,7 +11,7 @@ from pathlib import Path
 from typing import Any
 
 
-EXPECTED_FILES = ["validated.tsv", "other.tsv", "invalidated.tsv", "reported.tsv", "README.md"]
+EXPECTED_FILES = ["validated.tsv", "other.tsv", "invalidated.tsv", "reported.tsv", "README.md", "LICENSE.md", "CITATION.bib", "corpus_stats.json", "clips"]
 EXPECTED_COLUMNS = [
     "path",
     "sentence",
