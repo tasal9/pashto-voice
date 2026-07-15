@@ -8,8 +8,7 @@ This document defines the Mozilla Common Voice-compatible release format used by
 pashtovoice_commonvoice/
 ├── clips/                          # Audio clip files
 │   ├── <audio_id>/
-│   │   └── <segment_id>.wav
-│   └── ...
+│   │   └── <clip_filename>.wav
 ├── validated.tsv                   # High-quality clips (audio_quality_score >= 90)
 ├── other.tsv                       # Acceptable clips needing review (75 <= score < 90)
 ├── invalidated.tsv                 # Low-quality or invalid clips (score < 75)
