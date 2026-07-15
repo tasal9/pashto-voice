@@ -295,8 +295,9 @@ class TestValidateCommonVoice(unittest.TestCase):
         corpus_dir = self.temp_path / "cv"
         corpus_dir.mkdir()
         (corpus_dir / "validated.tsv").write_text("path\tsentence\nclip.wav\tsentence\n", encoding="utf-8")
-        for name in ["other.tsv", "invalidated.tsv", "reported.tsv", "README.md"]:
+        for name in ["other.tsv", "invalidated.tsv", "reported.tsv", "README.md", "LICENSE.md", "CITATION.bib", "corpus_stats.json"]:
             (corpus_dir / name).write_text("", encoding="utf-8")
+        (corpus_dir / "clips").mkdir()
         result = validate_common_voice.validate_corpus(corpus_dir)
         self.assertFalse(result["valid"])
         self.assertTrue(any("missing columns" in e for e in result["errors"]))
