@@ -84,8 +84,15 @@ def validate_corpus(corpus_dir: Path, *, require_audio: bool = False) -> dict[st
 
     segment_ids = [row.get("segment_id", "") for row in all_rows if row.get("segment_id")]
     if len(segment_ids) != len(set(segment_ids)):
-        duplicates = {sid for sid in segment_ids if segment_ids.count(sid) > 1}
-        errors.append(f"Duplicate segment_ids: {', '.join(sorted(duplicates))[:5]}")
+        seen: set[str] = set()
+        duplicates: set[str] = set()
+        for sid in segment_ids:
+            if sid in seen:
+                duplicates.add(sid)
+            else:
+                seen.add(sid)
+        sample = ", ".join(sorted(duplicates)[:5])
+        errors.append(f"Duplicate segment_ids (showing up to 5): {sample}")
 
     # Summarize repeated warnings to keep reports readable.
     missing_audio_count = sum(1 for w in warnings if "audio missing" in w)
