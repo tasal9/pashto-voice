@@ -150,7 +150,7 @@ def build_common_voice_row(
     rebased = rebased_clip_path(audio_path)
 
     return {
-        "path": str(rebased),
+        "path": rebased.as_posix(),
         "sentence": sentence,
         "sentence_normalized": sentence_normalized,
         "up_votes": 0,
