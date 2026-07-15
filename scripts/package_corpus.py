@@ -37,8 +37,12 @@ def package_corpus(
         raise ValueError(f"Unsupported archive format: {archive_format}")
 
     if not str(out_path).endswith(suffix):
-        out_path = out_path.with_suffix(suffix)
-
+        base = str(out_path)
+        for ext in (".tar.gz", ".zip", ".tar", ".gz"):
+            if base.endswith(ext):
+                base = base[: -len(ext)]
+                break
+        out_path = Path(base + suffix)
     with tempfile.TemporaryDirectory() as tmpdir:
         staged = Path(tmpdir) / corpus_dir.name
         shutil.copytree(corpus_dir, staged)
