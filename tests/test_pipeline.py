@@ -257,9 +257,20 @@ class TestExportCommonVoice(unittest.TestCase):
         )
         out_dir = self.temp_path / "cv"
         # Simulate CLI by calling main with parsed args.
-        sys.argv = [
-            "export_common_voice.py",
-            str(manifest_path),
+        old_argv = sys.argv[:]
+        try:
+            sys.argv = [
+                "export_common_voice.py",
+                str(manifest_path),
+                "--out-dir", str(out_dir),
+                "--locale", "ps",
+                "--source-name", "Test",
+            ]
+            export_common_voice.main()
+        finally:
+            sys.argv = old_argv
+        self.assertTrue((out_dir / "validated.tsv").exists())
+        self.assertTrue((out_dir / "README.md").exists())
             "--out-dir", str(out_dir),
             "--locale", "ps",
             "--source-name", "Test",
