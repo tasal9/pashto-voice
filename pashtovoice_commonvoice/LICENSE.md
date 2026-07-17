@@ -1,0 +1,1 @@
+This corpus is released under terms compatible with the source audio and text licenses. Verify source-level licensing and permission records before redistribution. When contributing clips back to Mozilla Common Voice, CC0-1.0 applies.
