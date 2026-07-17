@@ -53,20 +53,39 @@ Create a large-scale, multi-speaker Pashto speech-text corpus suitable for text-
 
 Install the lightweight pilot dependencies before running dataset, inventory, quality, or test scripts:
 
+**Linux / macOS:**
+
 ```bash
 python3 -m venv .venv
 .venv/bin/python -m pip install -r requirements-pilot.txt
 ```
 
+**Windows:**
+
+```powershell
+python -m venv .venv
+.venv\Scripts\python.exe -m pip install -r requirements-pilot.txt
+```
+
 Install the ASR dependencies before running Katib-ASR:
+
+**Linux / macOS:**
 
 ```bash
 .venv/bin/python -m pip install -r requirements-asr.txt --retries 10 --timeout 120
 ```
 
-The ASR dependencies include `transformers` and `torch`, so the first install can take several minutes and may need a stable network connection. Katib-ASR model loading also downloads a 3.09 GB Hugging Face model cache on the first run; use a fast network path and prefer a CUDA GPU for full-pilot inference.
+**Windows:**
+
+```powershell
+.venv\Scripts\python.exe -m pip install -r requirements-asr.txt --retries 10 --timeout 120
+```
+
+The ASR dependencies include `transformers`, `torch`, and `openai-whisper`, so the first install can take several minutes and may need a stable network connection. Katib-ASR model loading also downloads a 3.09 GB Hugging Face model cache on the first run; use a fast network path and prefer a CUDA GPU for full-pilot inference.
 
 ## Pilot Commands
+
+**Linux / macOS:**
 
 ```bash
 .venv/bin/python scripts/load_fleurs_pilot.py --config ps_af --split train --target-hours 8 --streaming --out metadata/fleurs_pashto_pilot.jsonl
@@ -77,6 +96,19 @@ HF_HUB_DISABLE_XET=1 .venv/bin/python -c "from huggingface_hub import snapshot_d
 .venv/bin/python scripts/run_katib_asr.py metadata/amin_sultani_segments_manifest.jsonl --resume --out metadata/amin_sultani_katib_asr.jsonl --continue-on-error --progress-every 25
 .venv/bin/python scripts/text_quality_stats.py metadata/amin_sultani_katib_asr.jsonl --out metadata/amin_sultani_text_quality.jsonl --summary-out metadata/amin_sultani_text_quality_summary.json
 .venv/bin/python scripts/export_manual_review.py metadata/amin_sultani_text_quality.jsonl --out metadata/amin_sultani_manual_review.csv --limit 100
+```
+
+**Windows:**
+
+```powershell
+.venv\Scripts\python.exe scripts/load_fleurs_pilot.py --config ps_af --split train --target-hours 8 --streaming --out metadata/fleurs_pashto_pilot.jsonl
+.venv\Scripts\python.exe scripts/load_fleurs_pilot.py --tsv data/raw/fleurs/ps_af_train.tsv --split train --target-hours 8 --out metadata/fleurs_pashto_pilot.jsonl
+.venv\Scripts\python.exe scripts/pilot_stats.py metadata/fleurs_pashto_pilot.jsonl
+$env:HF_HUB_DISABLE_XET=1; .venv\Scripts\python.exe -c "from huggingface_hub import snapshot_download; snapshot_download('uzair0/Katib-ASR', allow_patterns=['config.json','generation_config.json','model.safetensors','processor_config.json','tokenizer.json','tokenizer_config.json'], resume_download=True)"
+.venv\Scripts\python.exe scripts/run_katib_asr.py metadata/amin_sultani_segments_manifest.jsonl --limit 25 --device cpu --out metadata/katib_asr_smoke.jsonl --continue-on-error
+.venv\Scripts\python.exe scripts/run_katib_asr.py metadata/amin_sultani_segments_manifest.jsonl --resume --out metadata/amin_sultani_katib_asr.jsonl --continue-on-error --progress-every 25
+.venv\Scripts\python.exe scripts/text_quality_stats.py metadata/amin_sultani_katib_asr.jsonl --out metadata/amin_sultani_text_quality.jsonl --summary-out metadata/amin_sultani_text_quality_summary.json
+.venv\Scripts\python.exe scripts/export_manual_review.py metadata/amin_sultani_text_quality.jsonl --out metadata/amin_sultani_manual_review.csv --limit 100
 ```
 
 ## Common Voice-Style Export
@@ -97,11 +129,18 @@ PYTHONPATH=scripts .venv/bin/python scripts/package_corpus.py pashtovoice_common
 ```
 
 The exporter produces `validated.tsv`, `other.tsv`, `invalidated.tsv`, `reported.tsv`, `clips/`, `README.md`, `LICENSE.md`, `CITATION.bib`, and `corpus_stats.json`. See `docs/common_voice_format.md` for the full schema.
-
 ## Testing
 
 To verify the correctness of the pipeline components (normalization, audio quality calculations, pilot statistics, and Common Voice export), run the test suite:
 
+**Linux / macOS:**
+
 ```bash
 .venv/bin/python tests/test_pipeline.py
+```
+
+**Windows:**
+
+```powershell
+.venv\Scripts\python.exe tests/test_pipeline.py
 ```

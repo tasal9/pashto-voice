@@ -1,3 +1,4 @@
 transformers>=4.38,<4.40
 numpy<2
 torch
+openai-whisper

@@ -8,8 +8,7 @@ This document defines the Mozilla Common Voice-compatible release format used by
 pashtovoice_commonvoice/
 ├── clips/                          # Audio clip files
 │   ├── <audio_id>/
-│   │   └── <segment_id>.wav
-│   └── ...
+│   │   └── <clip_filename>.wav
 ├── validated.tsv                   # High-quality clips (audio_quality_score >= 90)
 ├── other.tsv                       # Acceptable clips needing review (75 <= score < 90)
 ├── invalidated.tsv                 # Low-quality or invalid clips (score < 75)
@@ -49,7 +48,7 @@ Each manifest TSV uses UTF-8 encoding, tab-separated values, and a header row.
 
 - Every `path` must resolve to an existing file under `clips/`.
 - `duration_sec` must be positive and match the actual audio duration when audio is present.
-- `sentence` and `sentence_normalized` must be non-empty for validated clips; empty values are allowed only when ASR is pending and documented.
+- `sentence` and `sentence_normalized` may be empty when ASR/manual transcription is pending (including for clips that land in `validated.tsv` via audio-quality scoring).
 - All rows must use locale `ps`.
 
 ## Source-to-Common-Voice Mappings
