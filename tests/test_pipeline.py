@@ -3,6 +3,7 @@ import unittest
 import math
 import wave
 import tempfile
+import json
 from pathlib import Path
 
 # Add scripts directory to sys.path so we can import the modules
@@ -14,6 +15,8 @@ import audio_quality_stats
 import pilot_stats
 import text_quality_stats
 import export_manual_review
+import export_common_voice
+import validate_common_voice
 
 
 class TestPashtoNormalize(unittest.TestCase):
@@ -186,6 +189,131 @@ class TestExportManualReview(unittest.TestCase):
         self.assertEqual(row["review_status"], "pending")
         self.assertEqual(row["corrected_transcript"], "")
         self.assertEqual(row["prediction_normalized"], "دا پښتو دی")
+
+
+class TestExportCommonVoice(unittest.TestCase):
+    def setUp(self):
+        self.temp_dir = tempfile.TemporaryDirectory()
+        self.temp_path = Path(self.temp_dir.name)
+
+    def tearDown(self):
+        self.temp_dir.cleanup()
+
+    def test_build_common_voice_row_with_transcript(self):
+        row = {
+            "segment_id": "seg1",
+            "source_id": "src1",
+            "audio_id": "aud1",
+            "audio_path": "data/processed/src1/segments/aud1/aud1_00000.wav",
+            "start_time_sec": 0.0,
+            "end_time_sec": 5.0,
+            "duration_sec": 5.0,
+            "transcript": "دا پښتو دی",
+            "gender": "male",
+            "dialect": "eastern",
+            "split": "train",
+        }
+        cv_row = export_common_voice.build_common_voice_row(row, {}, {}, "ps")
+        self.assertEqual(cv_row["segment_id"], "seg1")
+        self.assertEqual(cv_row["path"], "aud1/aud1_00000.wav")
+        self.assertEqual(cv_row["sentence"], "دا پښتو دی")
+        self.assertEqual(cv_row["sentence_normalized"], "دا پښتو دی")
+        self.assertEqual(cv_row["gender"], "male")
+        self.assertEqual(cv_row["accent"], "eastern")
+        self.assertEqual(cv_row["locale"], "ps")
+        self.assertEqual(cv_row["split"], "train")
+
+    def test_build_common_voice_row_uses_asr_prediction(self):
+        row = {"segment_id": "seg1", "audio_path": "a.wav", "duration_sec": 3.0}
+        asr_index = {"seg1": {"prediction": "اس ار پښتو"}}
+        cv_row = export_common_voice.build_common_voice_row(row, asr_index, {}, "ps")
+        self.assertEqual(cv_row["sentence"], "اس ار پښتو")
+
+    def test_classify_validation(self):
+        self.assertEqual(export_common_voice.classify_validation({"audio_quality_score": 95}), "validated")
+        self.assertEqual(export_common_voice.classify_validation({"audio_quality_score": 80}), "other")
+        self.assertEqual(export_common_voice.classify_validation({"audio_quality_score": 60}), "invalidated")
+
+    def test_rebased_clip_path_detects_segments(self):
+        self.assertEqual(
+            export_common_voice.rebased_clip_path("data/processed/x/segments/y/z.wav"),
+            Path("y/z.wav"),
+        )
+
+    def test_end_to_end_export(self):
+        manifest_path = self.temp_path / "manifest.jsonl"
+        manifest_path.write_text(
+            json.dumps({
+                "segment_id": "seg1",
+                "source_id": "src1",
+                "audio_id": "aud1",
+                "audio_path": "data/processed/src1/segments/aud1/aud1_00000.wav",
+                "duration_sec": 5.0,
+                "audio_quality_score": 95,
+                "transcript": "دا پښتو دی",
+            }, ensure_ascii=False)
+            + "\n",
+            encoding="utf-8",
+        )
+        out_dir = self.temp_path / "cv"
+        # Simulate CLI by calling main with parsed args.
+        old_argv = sys.argv[:]
+        try:
+            sys.argv = [
+                "export_common_voice.py",
+                str(manifest_path),
+                "--out-dir", str(out_dir),
+                "--locale", "ps",
+                "--source-name", "Test",
+            ]
+            export_common_voice.main()
+        finally:
+            sys.argv = old_argv
+        self.assertTrue((out_dir / "validated.tsv").exists())
+        self.assertTrue((out_dir / "README.md").exists())
+            "--out-dir", str(out_dir),
+            "--locale", "ps",
+            "--source-name", "Test",
+        ]
+        export_common_voice.main()
+        self.assertTrue((out_dir / "validated.tsv").exists())
+        self.assertTrue((out_dir / "README.md").exists())
+
+
+class TestValidateCommonVoice(unittest.TestCase):
+    def setUp(self):
+        self.temp_dir = tempfile.TemporaryDirectory()
+        self.temp_path = Path(self.temp_dir.name)
+
+    def tearDown(self):
+        self.temp_dir.cleanup()
+
+    def test_validate_corpus_valid(self):
+        corpus_dir = self.temp_path / "cv"
+        corpus_dir.mkdir()
+        (corpus_dir / "validated.tsv").write_text(
+            "\t".join(validate_common_voice.EXPECTED_COLUMNS) + "\n"
+            + "\t".join(["clip.wav", "sentence", "normalized", "0", "0", "", "", "", "ps", "seg1", "src1", "aud1", "0.0", "5.0", "5.0", "95", "0.9", "spk1", "train"]) + "\n",
+            encoding="utf-8",
+        )
+        header_only = "\t".join(validate_common_voice.EXPECTED_COLUMNS) + "\n"
+        for name in ["other.tsv", "invalidated.tsv", "reported.tsv"]:
+            (corpus_dir / name).write_text(header_only, encoding="utf-8")
+        (corpus_dir / "README.md").write_text("", encoding="utf-8")
+        result = validate_common_voice.validate_corpus(corpus_dir)
+        self.assertTrue(result["valid"])
+        self.assertEqual(result["total_rows"], 1)
+
+    def test_validate_corpus_missing_columns(self):
+        corpus_dir = self.temp_path / "cv"
+        corpus_dir.mkdir()
+        (corpus_dir / "validated.tsv").write_text("path\tsentence\nclip.wav\tsentence\n", encoding="utf-8")
+        for name in ["other.tsv", "invalidated.tsv", "reported.tsv", "README.md", "LICENSE.md", "CITATION.bib", "corpus_stats.json"]:
+            (corpus_dir / name).write_text("", encoding="utf-8")
+        (corpus_dir / "clips").mkdir()
+        result = validate_common_voice.validate_corpus(corpus_dir)
+        self.assertFalse(result["valid"])
+        self.assertTrue(any("missing columns" in e for e in result["errors"]))
 
 
 if __name__ == "__main__":
