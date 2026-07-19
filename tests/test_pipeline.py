@@ -296,8 +296,10 @@ class TestValidateCommonVoice(unittest.TestCase):
             + "\t".join(["clip.wav", "sentence", "normalized", "0", "0", "", "", "", "ps", "seg1", "src1", "aud1", "0.0", "5.0", "5.0", "95", "0.9", "spk1", "train"]) + "\n",
             encoding="utf-8",
         )
-        for name in ["other.tsv", "invalidated.tsv", "reported.tsv", "README.md"]:
-            (corpus_dir / name).write_text("", encoding="utf-8")
+        header_only = "\t".join(validate_common_voice.EXPECTED_COLUMNS) + "\n"
+        for name in ["other.tsv", "invalidated.tsv", "reported.tsv"]:
+            (corpus_dir / name).write_text(header_only, encoding="utf-8")
+        (corpus_dir / "README.md").write_text("", encoding="utf-8")
         result = validate_common_voice.validate_corpus(corpus_dir)
         self.assertTrue(result["valid"])
         self.assertEqual(result["total_rows"], 1)
